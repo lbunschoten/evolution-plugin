@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd-cpd>
+	<duplication lines="133" tokens="824">
+		<file line="1016"
+			path="File.java" />
+		<file line="1151"
+			path="File.java" />
+		<file line="1286"
+			path="File.java" />
+		<codefragment>
+<![CDATA[
+            Some code
+]]>
+		</codefragment>
+	</duplication>
+	<duplication lines="98" tokens="600">
+		<file line="593"
+			path="File.java" />
+		<file line="693"
+			path="File.java" />
+		<file line="793"
+			path="File.java" />
+		<codefragment>
+<![CDATA[
+     Some code
+]]>
+		</codefragment>
+	</duplication>
+</pmd-cpd>

@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="simian.xsl" type="text/xsl"?>
+<!--
+Similarity Analyser 2.3.33 - http://www.harukizaemon.com/simian
+Copyright (c) 2003-2011 Simon Harris.  All rights reserved.
+Simian is not free unless used solely for non-commercial or evaluation purposes.
+-->
+<simian version="2.3.33">
+    <check failOnDuplication="true" ignoreCharacterCase="true" ignoreCurlyBraces="true" ignoreIdentifierCase="true" ignoreModifiers="true" ignoreStringCase="true" reportDuplicateText="true" threshold="6">
+        <set lineCount="6">
+            <block sourceFile="C:\Jenkins\workspace\AnalyseBuilder\AnalysisCore\Filter\AnalysisFilterOption.cs" startLineNumber="12" endLineNumber="18"/>
+            <block sourceFile="C:\Jenkins\workspace\AnalyseBuilder\AnalysisCore\AnalysisFilterOption.cs" startLineNumber="12" endLineNumber="18"/>
+            <block sourceFile="C:\Jenkins\workspace\AnalyseBuilder\AnalysisBase\AnalysisFilterOption.cs" startLineNumber="8" endLineNumber="14"/>
+            <text>
+<![CDATA[public enum AnalysisFilterOption{
+   Equals,
+   NotEquals,
+   StartsWith,
+   EndsWith,
+   Contains
+]]>
+            </text>
+        </set>
+        <set lineCount="6">
+            <block sourceFile="C:\Jenkins\workspace\AnalyseBuilder\Visualizer\Models\Repositories\Repository.cs" startLineNumber="20" endLineNumber="34"/>
+            <block sourceFile="C:\Jenkins\workspace\AnalyseBuilder\AnalyseBuilder\Models\Repositories\Repository.cs" startLineNumber="20" endLineNumber="34"/>
+            <text>
+<![CDATA[            _log = LogManager.GetLogger(this.GetType());        }
+
+        /// <summary>
+        /// Saves all submitted objects to the <see cref="System.Data.Linq.DataContext"/>.
+        /// </summary>
+        /// <returns></returns>
+        protected bool Save()
+        {
+            bool saved = true;
+            try
+            {
+                DB.SubmitChanges();
+            }
+            catch (Exception e)
+]]>
+            </text>
+        </set>
+        <set lineCount="6">
+            <block sourceFile="C:\Jenkins\workspace\AnalyseBuilder\Analysis\LocatieMedewerker\generated.cs" startLineNumber="11" endLineNumber="21"/>
+            <block sourceFile="C:\Jenkins\workspace\AnalyseBuilder\Analysis\LocatieMedewerker\Analysis.cs" startLineNumber="9" endLineNumber="23"/>
+            <text>
+<![CDATA[    public class Analysis : AnalysisBase    {
+        private readonly Repository repository;
+
+        public Analysis()
+        {
+            repository = new Repository();
+            base.Type = AnalysisType.Marker;
+        }
+
+        /// <summary>
+        /// Entrypoint for analysis. This method is called from the AnalysisController of the Visualizer.
+        /// </summary>
+        /// <returns></returns>
+        public override string Execute()
+]]>
+            </text>
+        </set>
+        <set lineCount="6">
+            <block sourceFile="C:\Jenkins\workspace\AnalyseBuilder\AnalyseBuilder.Tests\AnalyseBuilder.BusinessObjects\CompilerTest.cs" startLineNumber="28" endLineNumber="35"/>
+            <block sourceFile="C:\Jenkins\workspace\AnalyseBuilder\AnalyseBuilder.Tests\AnalyseBuilder.BusinessObjects\AnalysisBuilderTest.cs" startLineNumber="27" endLineNumber="34"/>
+            <block sourceFile="C:\Jenkins\workspace\AnalyseBuilder\AnalyseBuilder.Tests\AnalyseBuilder\IORepositoryTest.cs" startLineNumber="27" endLineNumber="34"/>
+            <text>
+<![CDATA[        [ClassInitialize()]        public static void MyClassInitialize(TestContext testContext)
+        {
+            _testAnalysis = new AnalysisMetadata();
+            _testAnalysis.ID = "Locatie_medewerker_test";
+            _testAnalysis.DataSource = new DataSourceMetadata()
+            {
+                Tables = new List<TableMetadata>(){
+]]>
+            </text>
+        </set>
+        <set lineCount="7">
+            <block sourceFile="C:\Jenkins\workspace\AnalyseBuilder\AnalyseBuilder.Tests\AnalyseBuilder.Controllers\DataSourceControllerTest.cs" startLineNumber="92" endLineNumber="98"/>
+            <block sourceFile="C:\Jenkins\workspace\AnalyseBuilder\AnalyseBuilder.Tests\AnalyseBuilder.Controllers\DataSourceControllerTest.cs" startLineNumber="107" endLineNumber="113"/>
+            <text>
+<![CDATA[            FormCollection fc = new FormCollection();            fc.Add("Tables[0].Selected", "false");
+            fc.Add("Tables[0].LinqName", "Accounts");
+            fc.Add("Tables[0].TypeName", "Account");
+            fc.Add("Tables[1].Selected", "false");
+            fc.Add("Tables[1].LinqName", "Assignments");
+            fc.Add("Tables[1].TypeName", "Assignment");
+]]>
+            </text>
+        </set>
+        <set lineCount="9">
+            <block sourceFile="C:\Jenkins\workspace\AnalyseBuilder\AnalyseBuilder.Tests\AnalyseBuilder.Controllers\DataSourceControllerTest.cs" startLineNumber="18" endLineNumber="52"/>
+            <block sourceFile="C:\Jenkins\workspace\AnalyseBuilder\AnalyseBuilder.Tests\AnalyseBuilder.Controllers\GeocodeControllerTest.cs" startLineNumber="15" endLineNumber="49"/>
+            <text>
+<![CDATA[        private static TestControllerBuilder _builder;        #region Additional test attributes
+        // 
+        //You can use the following additional attributes as you write your tests:
+        //
+        //Use ClassInitialize to run code before running the first test in the class
+        [ClassInitialize()]
+        public static void MyClassInitialize(TestContext testContext)
+        {
+            _builder = new TestControllerBuilder();
+        }
+
+        //Use ClassCleanup to run code after all tests in a class have run
+        [ClassCleanup()]
+        public static void MyClassCleanup()
+        {
+            _builder = null;
+        }
+        //
+        //Use TestInitialize to run code before running each test
+        //[TestInitialize()]
+        //public void MyTestInitialize()
+        //{
+        //}
+        //
+        //Use TestCleanup to run code after each test has run
+        //[TestCleanup()]
+        //public void MyTestCleanup()
+        //{
+        //}
+        //
+        #endregion
+
+        [TestMethod()]
+        public void IndexTest()
+]]>
+            </text>
+        </set>
+        <set lineCount="9">
+            <block sourceFile="C:\Jenkins\workspace\AnalyseBuilder\AnalysisBase\Properties\AssemblyInfo.cs" startLineNumber="1" endLineNumber="15"/>
+            <block sourceFile="C:\Jenkins\workspace\AnalyseBuilder\AnalysisCore\Properties\AssemblyInfo.cs" startLineNumber="1" endLineNumber="15"/>
+            <text>
+<![CDATA[﻿using System.Reflection;using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+
+// General Information about an assembly is controlled through the following 
+// set of attributes. Change these attribute values to modify the information
+// associated with an assembly.
+[assembly: AssemblyTitle("AnalysisBase")]
+[assembly: AssemblyDescription("")]
+[assembly: AssemblyConfiguration("")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("AnalysisBase")]
+[assembly: AssemblyCopyright("Copyright ©  2012")]
+[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCulture("")]
+]]>
+            </text>
+        </set>
+        <set lineCount="11">
+            <block sourceFile="C:\Jenkins\workspace\AnalyseBuilder\AnalyseBuilder.Tests\AnalyseBuilder\IORepositoryTest.cs" startLineNumber="21" endLineNumber="43"/>
+            <block sourceFile="C:\Jenkins\workspace\AnalyseBuilder\AnalyseBuilder.Tests\AnalyseBuilder.BusinessObjects\CompilerTest.cs" startLineNumber="21" endLineNumber="44"/>
+            <text>
+<![CDATA[        private static AnalysisMetadata _testAnalysis;
+        #region Additional test attributes
+        // 
+        //You can use the following additional attributes as you write your tests:
+        //
+        //Use ClassInitialize to run code before running the first test in the class
+        [ClassInitialize()]
+        public static void MyClassInitialize(TestContext testContext)
+        {
+            _testAnalysis = new AnalysisMetadata();
+            _testAnalysis.ID = "Locatie_medewerker_test";
+            _testAnalysis.DataSource = new DataSourceMetadata()
+            {
+                Tables = new List<TableMetadata>(){
+                    new TableMetadata(){ LinqName ="Persons"},
+                    new TableMetadata(){ LinqName = "Customers"}
+                }
+            };
+        }
+        //
+        //Use ClassCleanup to run code after all tests in a class have run
+        [ClassCleanup()]
+        public static void MyClassCleanup()
+]]>
+            </text>
+        </set>
+        <set lineCount="15">
+            <block sourceFile="C:\Jenkins\workspace\AnalyseBuilder\AnalyseBuilder\Global.asax.cs" startLineNumber="1" endLineNumber="37"/>
+            <block sourceFile="C:\Jenkins\workspace\AnalyseBuilder\Visualizer\Global.asax.cs" startLineNumber="1" endLineNumber="37"/>
+            <text>
+<![CDATA[﻿using System;using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using System.Web.Routing;
+
+namespace Visualizer
+{
+    // Note: For instructions on enabling IIS6 or IIS7 classic mode, 
+    // visit http://go.microsoft.com/?LinkId=9394801
+
+    public class MvcApplication : System.Web.HttpApplication
+    {
+        public static void RegisterGlobalFilters(GlobalFilterCollection filters)
+        {
+            filters.Add(new HandleErrorAttribute());
+        }
+
+        public static void RegisterRoutes(RouteCollection routes)
+        {
+            routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+
+            routes.MapRoute(
+                "Default", // Route name
+                "{controller}/{action}/{id}", // URL with parameters
+                new { controller = "Home", action = "Index", id = UrlParameter.Optional } // Parameter defaults
+            );
+
+        }
+
+        protected void Application_Start()
+        {
+            AreaRegistration.RegisterAllAreas();
+
+            RegisterGlobalFilters(GlobalFilters.Filters);
+            RegisterRoutes(RouteTable.Routes);
+]]>
+            </text>
+        </set>
+        <set lineCount="63">
+            <block sourceFile="C:\Jenkins\workspace\AnalyseBuilder\AnalyseBuilder.Tests\AnalysisCore\ProxyTest.cs" startLineNumber="176" endLineNumber="238"/>
+            <block sourceFile="C:\Jenkins\workspace\AnalyseBuilder\AnalyseBuilder.Tests\AnalysisCore\ProxyTest.cs" startLineNumber="250" endLineNumber="312"/>
+            <text>
+<![CDATA[            string xml = @"<?xml version='1.0' encoding='UTF-8'?>            <GeocodeResponse>
+             <status>OK</status>
+             <result>
+              <type>street_address</type>
+              <formatted_address>Utrechtseweg 301, 3731 De Bilt, Nederland</formatted_address>
+              <address_component>
+               <long_name>301</long_name>
+               <short_name>301</short_name>
+               <type>street_number</type>
+              </address_component>
+              <address_component>
+               <long_name>Utrechtseweg</long_name>
+               <short_name>Utrechtseweg</short_name>
+               <type>route</type>
+              </address_component>
+              <address_component>
+               <long_name>De Bilt</long_name>
+               <short_name>De Bilt</short_name>
+               <type>locality</type>
+               <type>political</type>
+              </address_component>
+              <address_component>
+               <long_name>De Bilt</long_name>
+               <short_name>De Bilt</short_name>
+               <type>administrative_area_level_2</type>
+               <type>political</type>
+              </address_component>
+              <address_component>
+               <long_name>Utrecht</long_name>
+               <short_name>UT</short_name>
+               <type>administrative_area_level_1</type>
+               <type>political</type>
+              </address_component>
+              <address_component>
+               <long_name>Nederland</long_name>
+               <short_name>NL</short_name>
+               <type>country</type>
+               <type>political</type>
+              </address_component>
+              <address_component>
+               <long_name>3731</long_name>
+               <short_name>3731</short_name>
+               <type>postal_code_prefix</type>
+               <type>postal_code</type>
+              </address_component>
+              <geometry>
+               <location>
+                <lat>52.1023394</lat>
+                <lng>5.1752355</lng>
+               </location>
+               <location_type>ROOFTOP</location_type>
+               <viewport>
+                <southwest>
+                 <lat>52.1009904</lat>
+                 <lng>5.1738865</lng>
+                </southwest>
+                <northeast>
+                 <lat>52.1036884</lat>
+                 <lng>5.1765845</lng>
+                </northeast>
+               </viewport>
+              </geometry>
+]]>
+            </text>
+        </set>
+        <set lineCount="65">
+            <block sourceFile="C:\Jenkins\workspace\AnalyseBuilder\AnalyseBuilder.Tests\AnalysisCore\ProxyTest.cs" startLineNumber="314" endLineNumber="379"/>
+            <block sourceFile="C:\Jenkins\workspace\AnalyseBuilder\AnalyseBuilder.Tests\AnalysisCore\ProxyTest.cs" startLineNumber="180" endLineNumber="245"/>
+            <text>
+<![CDATA[              <type>street_address</type>              <formatted_address>Utrechtseweg 301, 3731 De Bilt, Nederland</formatted_address>
+              <address_component>
+               <long_name>301</long_name>
+               <short_name>301</short_name>
+               <type>street_number</type>
+              </address_component>
+              <address_component>
+               <long_name>Utrechtseweg</long_name>
+               <short_name>Utrechtseweg</short_name>
+               <type>route</type>
+              </address_component>
+              <address_component>
+               <long_name>De Bilt</long_name>
+               <short_name>De Bilt</short_name>
+               <type>locality</type>
+               <type>political</type>
+              </address_component>
+              <address_component>
+               <long_name>De Bilt</long_name>
+               <short_name>De Bilt</short_name>
+               <type>administrative_area_level_2</type>
+               <type>political</type>
+              </address_component>
+              <address_component>
+               <long_name>Utrecht</long_name>
+               <short_name>UT</short_name>
+               <type>administrative_area_level_1</type>
+               <type>political</type>
+              </address_component>
+              <address_component>
+               <long_name>Nederland</long_name>
+               <short_name>NL</short_name>
+               <type>country</type>
+               <type>political</type>
+              </address_component>
+              <address_component>
+               <long_name>3731</long_name>
+               <short_name>3731</short_name>
+               <type>postal_code_prefix</type>
+               <type>postal_code</type>
+              </address_component>
+              <geometry>
+               <location>
+                <lat>52.1023394</lat>
+                <lng>5.1752355</lng>
+               </location>
+               <location_type>ROOFTOP</location_type>
+               <viewport>
+                <southwest>
+                 <lat>52.1009904</lat>
+                 <lng>5.1738865</lng>
+                </southwest>
+                <northeast>
+                 <lat>52.1036884</lat>
+                 <lng>5.1765845</lng>
+                </northeast>
+               </viewport>
+              </geometry>
+             </result>
+            </GeocodeResponse>
+            ";
+
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(xml);
+            return doc;
+]]>
+            </text>
+        </set>
+        <summary duplicateFileCount="17" duplicateLineCount="406" duplicateBlockCount="22" totalFileCount="105" totalRawLineCount="5250" totalSignificantLineCount="2002" processingTime="922"/>
+    </check>
+</simian>

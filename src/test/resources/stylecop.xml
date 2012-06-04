@@ -1,0 +1,4 @@
+<StyleCopViolations>
+  <Violation Section="SomeSection" LineNumber="1" Source="SomeFile.cs" RuleNamespace="Microsoft.StyleCop.CSharp.ReadabilityRules" Rule="PrefixLocalCallsWithThis" RuleId="SA1101">The call to components must begin with the 'this.' prefix to indicate that the item is a member of the class.</Violation>
+  <Violation Section="SomeSection" LineNumber="1" Source="SomeFile.cs" RuleNamespace="Microsoft.StyleCop.CSharp.ReadabilityRules" Rule="PrefixLocalCallsWithThis" RuleId="SA1101">The call to components must begin with the 'this.' prefix to indicate that the item is a member of the class.</Violation>
+</StyleCopViolations>

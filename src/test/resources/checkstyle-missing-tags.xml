@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="5.5">
+	<file
+		name="/src/main/java/hudson/plugins/evolution/HelloWorldBuilder.java">
+		
+	</file>
+</checkstyle>

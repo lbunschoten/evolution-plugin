@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!DOCTYPE coverage SYSTEM "http://cobertura.sourceforge.net/xml/coverage-03.dtd">
+
+<coverage line-rate="0.24761904761904763" branch-rate="0.44" version="1.9" timestamp="1333611418790">
+	<sources>
+		<source>--source</source>
+		<source>/var/lib/jenkins/jobs/Evolution Plugin/workspace/src/main/java</source>
+		<source>/var/lib/jenkins/jobs/Evolution Plugin/workspace/target/generated-sources/localizer</source>
+	</sources>
+	<packages>
+		<package name="hudson.plugins.evolution" line-rate="0.10227272727272728" branch-rate="0.0" complexity="1.0">
+			<classes>
+				<class name="hudson.plugins.evolution.EvolutionDescriptor" filename="hudson/plugins/evolution/EvolutionDescriptor.java" line-rate="0.0" branch-rate="1.0" complexity="0.0">
+					<methods>
+						<method name="&lt;init&gt;" signature="()V" line-rate="0.0" branch-rate="1.0">
+							<lines>
+								<line number="19" hits="0" branch="false"/>
+								<line number="20" hits="0" branch="false"/>
+							</lines>
+						</method>
+						<method name="getDisplayName" signature="()Ljava/lang/String;" line-rate="0.0" branch-rate="1.0">
+							<lines>
+								<line number="37" hits="0" branch="false"/>
+							</lines>
+						</method>
+						<method name="getIconUrl" signature="()Ljava/lang/String;" line-rate="0.0" branch-rate="1.0">
+							<lines>
+								<line number="25" hits="0" branch="false"/>
+							</lines>
+						</method>
+						<method name="getPluginName" signature="()Ljava/lang/String;" line-rate="0.0" branch-rate="1.0">
+							<lines>
+								<line number="31" hits="0" branch="false"/>
+							</lines>
+						</method>
+					</methods>
+					<lines>
+						<line number="19" hits="0" branch="false"/>
+						<line number="20" hits="0" branch="false"/>
+						<line number="25" hits="0" branch="false"/>
+						<line number="31" hits="0" branch="false"/>
+						<line number="37" hits="0" branch="false"/>
+					</lines>
+				</class>
+			</classes>
+		</package>
+	</packages>
+</coverage>

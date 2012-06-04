@@ -1,0 +1,10 @@
+lass Main2 {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		XStream xstream = new XStream(new DomDriver());
+		
+		// Create job
+		Job job = new Job(

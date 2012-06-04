@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd version="3.7" timestamp="2006-11-15T10:51:57.866" elapsedTime="0s">
+	<file name="SomeFile.java">
+		<violation line="15" rule="UnusedImports" ruleset="Import Statement Rules"
+			package="com.stchome.dsms.appl.formdatasources.clientmanagement"
+			externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports"
+			priority="4">
+			Avoid unused imports such as
+			'com.stchome.dsms.appl.formdatasources.clientmanagement.util.AppResource'
+		</violation>
+	</file>
+</pmd>
