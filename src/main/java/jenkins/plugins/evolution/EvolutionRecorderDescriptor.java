@@ -2,7 +2,6 @@ package jenkins.plugins.evolution;
 
 import hudson.Extension;
 import hudson.model.AbstractProject;
-import jenkins.plugins.evolution.Messages;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Publisher;
 import java.util.Map.Entry;

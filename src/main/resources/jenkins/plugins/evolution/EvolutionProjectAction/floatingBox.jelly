@@ -1,13 +1,16 @@
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout"
          xmlns:t="/lib/hudson" xmlns:f="/lib/form">
 	
-	<j:set var="config" value="${from.config}"/>
+	<j:set var="config" value="${from.config}" />
+	<j:set var="resultCount" value="${from.getResultCount()}" />
 	
-	<j:if test="${from.hasEvolutionData()}">
+	<j:if test="${resultCount > 1}">
 		<j:if test="${config.scoreGraphEnabled}">
 			<img src="evolution/scoreGraph" lazymap="evolution/scoreGraphMap" usemap="#map0" alt="${%scoreGraph}" /><br />
 		</j:if>
-		
+	</j:if>
+	
+	<j:if test="${resultCount >= 20}">
 		<j:if test="${config.derivativeGraphEnabled}">
 			<img src="evolution/derivativeGraph" alt="${%derivativeGraph}" />
 		</j:if>

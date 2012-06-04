@@ -65,7 +65,7 @@ public class EvolutionRecorder extends Recorder
 	public boolean perform(AbstractBuild<?, ?> build, Launcher launcher, BuildListener listener)
 	{
 		logger = new PluginLogger(listener.getLogger(), "[EVOLUTION] ");
-		logger.log("Perform Evolution Tasks");
+		logger.log(Messages.EvolutionRecorder_performStart());
 		
 		boolean result = false;
 		
@@ -82,7 +82,7 @@ public class EvolutionRecorder extends Recorder
 			result = false;
 		}
 		
-		logger.log("Finished evolution tasks");
+		logger.log(Messages.EvolutionRecorder_performEnd());
 		
 		return result;
 	}

@@ -48,14 +48,14 @@ public class BuildTaskController
 	{
 		ArrayList<Result> results = readDataProviderResults();
 		
-		logger.log("Existing results have been read");
+		logger.log(Messages.BuildTaskController_readExistingResults());
 		
 		if(results.size() == 0)
 		{
-			logger.log("Invalid configuration: No data provider results available.");
+			logger.log(Messages.BuildTaskController_noResults());
 		}
 		
-		logger.log("Writing new results");
+		logger.log(Messages.BuildTaskController_writeResults());
 		
 		return writeEvolutionFile(results);
 	}
@@ -68,7 +68,7 @@ public class BuildTaskController
 		{
 			try
 			{
-				logger.log("Reading " + p.getName() + " results");
+				logger.log(Messages.BuildTaskController_readResults(p.getName()));
 				
 				results.add(p.getResult());
 			}
@@ -114,7 +114,6 @@ public class BuildTaskController
 		
 		try
 		{
-			logger.log("Writing to " + getEvolutionFile().getName());
 			EvolutionWriter writer = new EvolutionWriter(getEvolutionFile());
 			writer.write(job);
 		}

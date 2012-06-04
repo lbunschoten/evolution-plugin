@@ -79,15 +79,9 @@ public class EvolutionProjectAction extends Actionable implements Action
 		return new EvolutionUtil().getEvolutionFile(project);
 	}
 	
-	/**
-	 * Performs a check if the evolution plugin has been used during a build, by
-	 * checking if the evolution.xml file exists.
-	 * 
-	 * @return does an evolution.xml file already exist
-	 */
-	public boolean hasEvolutionData()
+	public int getResultCount()
 	{
-		return getEvolutionFile().exists();
+		return readBuildResults().size();
 	}
 	
 	/**

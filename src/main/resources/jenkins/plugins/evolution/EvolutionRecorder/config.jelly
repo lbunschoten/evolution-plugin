@@ -22,7 +22,7 @@
        <f:checkbox name="evolution.scoreGraphEnabled" checked="${scoreGraphEnabled}" />                                                                                        
     </f:entry>      
    
-   <f:entry title="Enable derivative graph">
+   <f:entry title="Enable derivative graph" description="The grah requires at least 20 build results">
        <f:checkbox name="evolution.derivativeGraphEnabled" checked="${derivativeGraphEnabled}" />                                                                                        
     </f:entry> 
    

@@ -29,8 +29,8 @@ public class EvolutionConfig implements Cloneable, Serializable
 	private HashMap<String, DataProviderConfig> dataProviders = new HashMap<String, DataProviderConfig>();
 	
 	/**
-	 * Constructor for a new Evolution config. All available dataProviders, used to
-	 * provide data for the evolution plugin, are defined here.
+	 * Constructor for a new Evolution config. All available dataProviders, used
+	 * to provide data for the evolution plugin, are defined here.
 	 */
 	public EvolutionConfig()
 	{
