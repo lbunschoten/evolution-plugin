@@ -1,6 +1,6 @@
 package jenkins.plugins.evolution.graph;
 
-import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
@@ -29,16 +29,21 @@ public class ScoreTooltipGenerator
 			}
 			else
 			{
-				stringBuilder.append("(" + pluginScore.getKey() + ") - ");
-				stringBuilder.append(round(pluginScore.getValue()) + nl);
+				stringBuilder.append(round(pluginScore.getValue()));
+				stringBuilder.append(" (" + pluginScore.getKey() + ")" + nl);
 			}
 		}
 		
 		return stringBuilder.toString();
 	}
 	
-	private double round(double value)
+	private String round(double value)
 	{
-		return new BigDecimal(value).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+		NumberFormat format = NumberFormat.getInstance();
+		
+		format.setMinimumFractionDigits(2);
+		format.setMaximumFractionDigits(2);
+		
+		return format.format(value);
 	}
 }
