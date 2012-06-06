@@ -28,7 +28,7 @@ public class RegExpReaderTest
 	@Test
 	public void test() throws FileNotFoundException, PersistenceException
 	{
-		RegExpReader reader = new RegExpReader(new FileInputStream("src/test/resources/ncover.html"), "Symbol Coverage: <span class=\"[\\w\\s]+\">([\\d,]+)%<\\/span>");
+		RegExpReader reader = new RegExpReader(new FileInputStream("src/test/resources/example-ncover.html"), "Symbol Coverage: <span class=\"[\\w\\s]+\">([\\d,]+)%<\\/span>");
 		
 		assertEquals("42,17", reader.read().group(1));
 	}
@@ -44,7 +44,7 @@ public class RegExpReaderTest
 	@Test(expected = PersistenceException.class)
 	public void testNonExistingExpression() throws PersistenceException, FileNotFoundException
 	{
-		RegExpReader reader = new RegExpReader(new FileInputStream("src/test/resources/ncover.html"), "nonExistingExpression");
+		RegExpReader reader = new RegExpReader(new FileInputStream("src/test/resources/example-ncover.html"), "nonExistingExpression");
 		
 		reader.read();
 	}
@@ -52,7 +52,7 @@ public class RegExpReaderTest
 	@Test(expected = PersistenceException.class)
 	public void testInvalidExpression() throws PersistenceException, FileNotFoundException
 	{
-		RegExpReader reader = new RegExpReader(new FileInputStream("src/test/resources/ncover.html"), "[]]][[][())&.*$");
+		RegExpReader reader = new RegExpReader(new FileInputStream("src/test/resources/example-ncover.html"), "[]]][[][())&.*$");
 		
 		reader.read();
 	}
@@ -69,7 +69,7 @@ public class RegExpReaderTest
 	@PrepareForTest(IOUtils.class)
 	public void testIOExceptionOnRead() throws IOException, PersistenceException
 	{
-		FileInputStream stream = new FileInputStream("src/test/resources/ncover.html");
+		FileInputStream stream = new FileInputStream("src/test/resources/example-ncover.html");
 		
 		RegExpReader reader = new RegExpReader(stream, "Symbol Coverage: <span class=\"[\\w\\s]+\">([\\d,]+)%<\\/span>");
 		

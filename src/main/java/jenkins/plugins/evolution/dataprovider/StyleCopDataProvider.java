@@ -18,6 +18,8 @@ public class StyleCopDataProvider extends DataProvider
 	
 	public static final String ID = NAME.toLowerCase();
 	
+	public static final String DEFAULT_PATH = "";
+	
 	public StyleCopDataProvider(InputStream inputStream)
 	{
 		super(inputStream);

@@ -34,15 +34,15 @@ public class EvolutionConfig implements Cloneable, Serializable
 	 */
 	public EvolutionConfig()
 	{
-		dataProviders.put(CheckStyleDataProvider.ID, new DataProviderConfig(CheckStyleDataProvider.NAME));
-		dataProviders.put(FindBugsDataProvider.ID, new DataProviderConfig(FindBugsDataProvider.NAME));
-		dataProviders.put(CoberturaDataProvider.ID, new DataProviderConfig(CoberturaDataProvider.NAME));
-		dataProviders.put(FxCopDataProvider.ID, new DataProviderConfig(FxCopDataProvider.NAME));
-		dataProviders.put(PMDDataProvider.ID, new DataProviderConfig(PMDDataProvider.NAME));
-		dataProviders.put(CPDDataProvider.ID, new DataProviderConfig(CPDDataProvider.NAME));
-		dataProviders.put(SimianDataProvider.ID, new DataProviderConfig(SimianDataProvider.NAME));
-		dataProviders.put(NCoverDataProvider.ID, new DataProviderConfig(NCoverDataProvider.NAME));
-		dataProviders.put(StyleCopDataProvider.ID, new DataProviderConfig(StyleCopDataProvider.NAME));
+		dataProviders.put(CheckStyleDataProvider.ID, new DataProviderConfig(CheckStyleDataProvider.NAME, CheckStyleDataProvider.DEFAULT_PATH));
+		dataProviders.put(FindBugsDataProvider.ID, new DataProviderConfig(FindBugsDataProvider.NAME, FindBugsDataProvider.DEFAULT_PATH));
+		dataProviders.put(CoberturaDataProvider.ID, new DataProviderConfig(CoberturaDataProvider.NAME, CoberturaDataProvider.DEFAULT_PATH));
+		dataProviders.put(FxCopDataProvider.ID, new DataProviderConfig(FxCopDataProvider.NAME, FxCopDataProvider.DEFAULT_PATH));
+		dataProviders.put(PMDDataProvider.ID, new DataProviderConfig(PMDDataProvider.NAME, PMDDataProvider.DEFAULT_PATH));
+		dataProviders.put(CPDDataProvider.ID, new DataProviderConfig(CPDDataProvider.NAME, CPDDataProvider.DEFAULT_PATH));
+		dataProviders.put(SimianDataProvider.ID, new DataProviderConfig(SimianDataProvider.NAME, SimianDataProvider.DEFAULT_PATH));
+		dataProviders.put(NCoverDataProvider.ID, new DataProviderConfig(NCoverDataProvider.NAME, NCoverDataProvider.DEFAULT_PATH));
+		dataProviders.put(StyleCopDataProvider.ID, new DataProviderConfig(StyleCopDataProvider.NAME, StyleCopDataProvider.DEFAULT_PATH));
 	}
 	
 	public HashMap<String, DataProviderConfig> getDataProviders()

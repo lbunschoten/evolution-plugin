@@ -78,7 +78,7 @@ public class EvolutionScoreCalculatorTest
 		assertEquals(5, calc.calculate(build).get("total"), 0);
 	}
 	
-	@Test(expected = InvalidConfigException.class)
+	@Test()
 	public void testWeightZero() throws InvalidConfigException
 	{
 		Build build = getBuild(1, 2, 8, 9);
@@ -92,7 +92,7 @@ public class EvolutionScoreCalculatorTest
 		
 		ScoreCalculator calc = new ScoreCalculator(config);
 		
-		calc.calculate(build);
+		assertEquals(5, calc.calculate(build).get("total"), 0);
 	}
 	
 	@Test
@@ -210,7 +210,7 @@ public class EvolutionScoreCalculatorTest
 	
 	private DataProviderConfig getDataProviderConfig(String min, String max, String weight)
 	{
-		DataProviderConfig configItem = new DataProviderConfig("checkstyle");
+		DataProviderConfig configItem = new DataProviderConfig("checkstyle", "");
 		
 		configItem.setMin(min);
 		configItem.setMax(max);

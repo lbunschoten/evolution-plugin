@@ -17,14 +17,16 @@ import jenkins.plugins.evolution.persistence.RegExpReader;
  */
 public class NCoverDataProvider extends DataProvider
 {
+	public static final String NAME = "NCover";
+	
+	public static final String ID = NAME.toLowerCase();
+	
+	public static final String DEFAULT_PATH = "**/fullcoveragereport.html";
+	
 	public NCoverDataProvider(InputStream inputStream)
 	{
 		super(inputStream);
 	}
-	
-	public static final String NAME = "NCover";
-	
-	public static final String ID = NAME.toLowerCase();
 	
 	@Override
 	public String getName()
@@ -54,10 +56,11 @@ public class NCoverDataProvider extends DataProvider
 	public double readResult() throws PersistenceException
 	{
 		double score = 0;
+		MatchResult result = null;
 		
 		try
 		{
-			MatchResult result = getReader().read();
+			 result = getReader().read();
 			
 			if(result != null)
 			{
@@ -67,7 +70,7 @@ public class NCoverDataProvider extends DataProvider
 		}
 		catch(ParseException e)
 		{
-			throw new PersistenceException(e.getMessage());
+			throw new PersistenceException("Could not parse result: " + result.group(1));
 		}
 		
 		return score;

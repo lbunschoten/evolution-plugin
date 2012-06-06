@@ -26,7 +26,7 @@ public class XPathReaderTest
 	{
 		System.setProperty("file.encoding", "UTF-8");
 		
-		XPathReader reader = new XPathReader(new FileInputStream(new File("src/test/resources/cobertura.xml")), "/coverage/@line-rate");
+		XPathReader reader = new XPathReader(new FileInputStream(new File("src/test/resources/example-cobertura.xml")), "/coverage/@line-rate");
 		
 		assertEquals(0.24761904761904763, reader.read());
 	}
@@ -42,7 +42,7 @@ public class XPathReaderTest
 	@Test(expected = PersistenceException.class)
 	public void testInvalidExpression() throws PersistenceException, FileNotFoundException
 	{
-		XPathReader reader = new XPathReader(new FileInputStream(new File("src/test/resources/cobertura.xml")), "/covefdgfdgrage/@(line-rate");
+		XPathReader reader = new XPathReader(new FileInputStream(new File("src/test/resources/example-cobertura.xml")), "/covefdgfdgrage/@(line-rate");
 		
 		reader.read();
 	}
@@ -60,7 +60,7 @@ public class XPathReaderTest
 	{
 		System.setProperty("file.encoding", "utf-9");
 		
-		XPathReader reader = new XPathReader(new FileInputStream(new File("src/test/resources/cobertura.xml")), "/coverage/@line-rate");
+		XPathReader reader = new XPathReader(new FileInputStream(new File("src/test/resources/example-cobertura.xml")), "/coverage/@line-rate");
 		
 		assertEquals(0.24761904761904763, reader.read());		
 	}

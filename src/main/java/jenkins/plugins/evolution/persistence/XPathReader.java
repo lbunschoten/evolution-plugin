@@ -32,8 +32,13 @@ public class XPathReader implements Reader<XPathReader>
 	}
 	
 	@Override
-	public void openReader()
+	public void openReader() throws PersistenceException
 	{
+		if(inputStream == null)
+		{
+			throw new PersistenceException("Could not read from file; Does the file exist?");
+		}
+		
 		factory = XPathFactory.newInstance();
 		
 		inputSource = new InputSource(inputStream);
@@ -46,14 +51,15 @@ public class XPathReader implements Reader<XPathReader>
 		Number result = null;
 		
 		openReader();
-		
+				
 		try
 		{
 			result = (Number) factory.newXPath().evaluate(expression, inputSource, XPathConstants.NUMBER);
 		}
 		catch(XPathExpressionException e)
 		{
-			throw new PersistenceException("Invalid XPath expression");
+			e.printStackTrace();
+			throw new PersistenceException("Invalid XPath expression: " + expression);
 		}
 		finally
 		{

@@ -74,7 +74,7 @@ public class BuildTaskController
 			}
 			catch(PersistenceException e)
 			{
-				logger.log(e.getMessage());
+				logger.log(Messages.BuildTaskController_readResults_PersistenceException(p.getName(), e.getMessage()));
 			}
 		}
 		
@@ -129,6 +129,7 @@ public class BuildTaskController
 	
 	private File getEvolutionFile()
 	{
+		// TODO As static value in Recorder
 		EvolutionUtil util = new EvolutionUtil();
 		
 		return util.getEvolutionFile(build.getProject());

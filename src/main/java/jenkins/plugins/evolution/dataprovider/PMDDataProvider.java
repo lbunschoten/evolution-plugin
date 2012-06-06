@@ -13,14 +13,16 @@ import jenkins.plugins.evolution.persistence.XPathReader;
  */
 public class PMDDataProvider extends DataProvider
 {
+	public static final String NAME = "PMD";
+	
+	public static final String ID = NAME.toLowerCase();
+	
+	public static final String DEFAULT_PATH = "**/pmd.xml";
+	
 	public PMDDataProvider(InputStream inputStream)
 	{
 		super(inputStream);
 	}
-	
-	public static final String NAME = "PMD";
-	
-	public static final String ID = NAME.toLowerCase();
 	
 	@Override
 	public String getName()

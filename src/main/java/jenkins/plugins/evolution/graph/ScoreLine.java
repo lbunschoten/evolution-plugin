@@ -25,7 +25,7 @@ public class ScoreLine extends AbstractLine
 	private static final float STROKE_WIDTH = 3F;
 	
 	/**
-	 * This value indicates the size of the 'points' diplayed in the graph. The
+	 * This value indicates the size of the 'points' displayed in the graph. The
 	 * small point is displayed whenever there is not enough space to display
 	 * the bigger 'point'.
 	 */
@@ -38,7 +38,7 @@ public class ScoreLine extends AbstractLine
 	private static final double SERIES_SHAPE_OFFSET_SMALL = SERIES_SHAPE_SIZE_SMALL / 2;
 	
 	/**
-	 * This value indicates the size of the 'points' diplayed in the graph. The
+	 * This value indicates the size of the 'points' displayed in the graph. The
 	 * big point is displayed whenever the space allows it within the graph.
 	 */
 	private static final double SERIES_SHAPE_SIZE_BIG = 6D;

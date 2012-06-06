@@ -14,14 +14,16 @@ import jenkins.plugins.evolution.persistence.XPathReader;
  */
 public class CoberturaDataProvider extends DataProvider
 {
+	public static final String NAME = "Cobertura";
+	
+	public static final String ID = NAME.toLowerCase();
+	
+	public static final String DEFAULT_PATH = "**/coverage.xml";
+	
 	public CoberturaDataProvider(InputStream inputStream)
 	{
 		super(inputStream);
 	}
-	
-	public static final String NAME = "Cobertura";
-	
-	public static final String ID = NAME.toLowerCase();
 	
 	/**
 	 * {@inheritDoc}

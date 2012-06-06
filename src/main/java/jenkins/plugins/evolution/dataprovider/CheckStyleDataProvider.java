@@ -18,6 +18,8 @@ public class CheckStyleDataProvider extends DataProvider
 	
 	public static final String ID = NAME.toLowerCase();
 	
+	public static final String DEFAULT_PATH = "**/checkstyle-result.xml";
+	
 	public CheckStyleDataProvider(InputStream inputStream)
 	{
 		super(inputStream);

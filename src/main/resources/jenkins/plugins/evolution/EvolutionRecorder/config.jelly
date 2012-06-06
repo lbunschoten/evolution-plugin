@@ -1,7 +1,6 @@
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define"
 	xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:u="/util">
 	
-	
 	<j:set var="config" value="${instance.existingConfig}"/>
 	
 	<j:choose>
@@ -18,20 +17,20 @@
   
     <j:set var="inputCell" value="padding-left: 0.3em; padding-right: 0.3em; padding-top:0em; padding-bottom:0em;"/>
    
-   <f:entry title="Enable score graph">
+   <f:entry title="Enable score graph" description="The graph requires at least 2 builds containing evolution results">
        <f:checkbox name="evolution.scoreGraphEnabled" checked="${scoreGraphEnabled}" />                                                                                        
     </f:entry>      
    
-   <f:entry title="Enable derivative graph" description="The grah requires at least 20 build results">
+   <f:entry title="Enable derivative graph" description="The graph requires at least 20 builds containing evolution results">
        <f:checkbox name="evolution.derivativeGraphEnabled" checked="${derivativeGraphEnabled}" />                                                                                        
     </f:entry> 
    
   	<f:entry>
   		<table style="width: 100%;">
   			<tr>
-	  			<th style="width: 40%;">Path</th>
-	  			<th style="width: 20%;" tooltip="This value indicates the worst possible result. This will result in a 0 in the score calculations. &lt;br /&gt;Notice that this value doesn't necesseraly have to be lower then the &quot;++&quot; value.">--</th>
-	  			<th style="width: 20%;" tooltip="This value indicates the best possible result. This will result in a 10 in the score calculations. &lt;br /&gt;Notice that this value doesn't necesseraly have to be higher then the &quot;--&quot; value.">++</th>
+	  			<th style="width: 40%;">Code analysis result file path</th>
+	  			<th style="width: 20%;" tooltip="This value indicates the worst possible result. This will result in a 0 in the score calculations. &lt;br /&gt;Notice that this value doesn't necesseraly have to be lower then the &quot;++&quot; value.">Undesired value</th>
+	  			<th style="width: 20%;" tooltip="This value indicates the best possible result. This will result in a 10 in the score calculations. &lt;br /&gt;Notice that this value doesn't necesseraly have to be higher then the &quot;--&quot; value.">Desired value</th>
 	  			<th style="width: 20%;">Weight</th>
 	  		</tr>
   		</table>
@@ -41,7 +40,7 @@
 			<table style="width: 100%;" cellspacing="0" padding="0">
 				<tr>
 					<td style="width: 40%; ${inputCell}">
-						<f:textbox name="dataprovider.${dataprovider.key}.path" value="${dataprovider.value.path}" />
+						<f:textbox name="dataprovider.${dataprovider.key}.path" value="${dataprovider.value.path}" default="${dataprovider.value.defaultPath}" />
 					</td>
 					<td style="width: 20%; ${inputCell}">
 						<f:textbox name="dataprovider.${dataprovider.key}.min" value="${dataprovider.value.min}" />
@@ -50,7 +49,7 @@
 						<f:textbox name="dataprovider.${dataprovider.key}.max" value="${dataprovider.value.max}" />
 					</td>
 					<td style="width: 20%; ${inputCell}">
-						<f:textbox name="dataprovider.${dataprovider.key}.weight" value="${dataprovider.value.weight}" />
+						<f:textbox name="dataprovider.${dataprovider.key}.weight" value="${dataprovider.value.weight}" default="1" />
 					</td>
 				</tr>
 		 	</table>

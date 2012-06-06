@@ -70,7 +70,7 @@ public class EvolutionReaderTest
 	@Test(expected = PersistenceException.class)
 	public void testNonEvolutionFile() throws PersistenceException, FileNotFoundException
 	{
-		new EvolutionReader(new FileInputStream("src/test/resources/cobertura.xml")).read();
+		new EvolutionReader(new FileInputStream("src/test/resources/example-cobertura.xml")).read();
 	}
 	
 	@Test(expected = PersistenceException.class)

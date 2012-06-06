@@ -89,28 +89,30 @@ public class ConfigManager
 	 * @throws FileNotFoundException
 	 * @throws InvalidConfigException
 	 */
-	private DataProvider getDataProviderById(String id, String path) throws FileNotFoundException, InvalidConfigException
+	private DataProvider getDataProviderById(String id, String path) throws InvalidConfigException
 	{
+		InputStream inputStream = findDataProviderResultsFile(path);
+		
 		switch(DataProviders.valueOf(id.toUpperCase()))
 		{
 			case CHECKSTYLE:
-				return new CheckStyleDataProvider(findDataProviderResultsFile(path));
+				return new CheckStyleDataProvider(inputStream);
 			case FINDBUGS:
-				return new FindBugsDataProvider(findDataProviderResultsFile(path));
+				return new FindBugsDataProvider(inputStream);
 			case PMD:
-				return new PMDDataProvider(findDataProviderResultsFile(path));
+				return new PMDDataProvider(inputStream);
 			case CPD:
-				return new CPDDataProvider(findDataProviderResultsFile(path));
+				return new CPDDataProvider(inputStream);
 			case COBERTURA:
-				return new CoberturaDataProvider(findDataProviderResultsFile(path));
+				return new CoberturaDataProvider(inputStream);
 			case NCOVER:
-				return new NCoverDataProvider(findDataProviderResultsFile(path));
+				return new NCoverDataProvider(inputStream);
 			case FXCOP:
-				return new FxCopDataProvider(findDataProviderResultsFile(path));
+				return new FxCopDataProvider(inputStream);
 			case SIMIAN:
-				return new SimianDataProvider(findDataProviderResultsFile(path));
+				return new SimianDataProvider(inputStream);
 			case STYLECOP:
-				return new StyleCopDataProvider(findDataProviderResultsFile(path));
+				return new StyleCopDataProvider(inputStream);
 			default:
 		}
 		
@@ -126,10 +128,6 @@ public class ConfigManager
 			try
 			{
 				dataProvider = getDataProviderById(dataProviderId, configItem.getPath());
-			}
-			catch(FileNotFoundException e)
-			{
-				logger.log(e.getMessage());
 			}
 			catch(InvalidConfigException e)
 			{
@@ -155,11 +153,11 @@ public class ConfigManager
 			}
 			catch(IOException e)
 			{
-				throw new InvalidConfigException(e.getMessage());
+				throw new InvalidConfigException("Could not load/find file at " + path);
 			}
 			catch(InterruptedException e)
 			{
-				throw new InvalidConfigException(e.getMessage());
+				throw new InvalidConfigException("Search for file \"" + path + "\" was interrupted");
 			}
 		}
 		

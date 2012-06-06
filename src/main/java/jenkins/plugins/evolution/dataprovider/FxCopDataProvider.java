@@ -12,15 +12,18 @@ import jenkins.plugins.evolution.persistence.XPathReader;
  * @author leon
  */
 public class FxCopDataProvider extends DataProvider
-{
+{	
+	public static final String NAME = "FxCop";
+	
+	public static final String ID = NAME.toLowerCase();
+	
+	public static final String DEFAULT_PATH = "";
+	
+	
 	public FxCopDataProvider(InputStream inputStream)
 	{
 		super(inputStream);
 	}
-	
-	public static final String NAME = "FxCop";
-	
-	public static final String ID = NAME.toLowerCase();
 	
 	@Override
 	public String getName()

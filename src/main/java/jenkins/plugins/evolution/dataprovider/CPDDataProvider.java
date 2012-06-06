@@ -13,14 +13,16 @@ import jenkins.plugins.evolution.persistence.XPathReader;
  */
 public class CPDDataProvider extends DataProvider
 {
+	public static final String NAME = "CPD";
+	
+	public static final String ID = NAME.toLowerCase();
+	
+	public static final String DEFAULT_PATH = "**/cpd.xml";
+	
 	public CPDDataProvider(InputStream inputStream)
 	{
 		super(inputStream);
 	}
-	
-	public static final String NAME = "CPD";
-	
-	public static final String ID = NAME.toLowerCase();
 	
 	@Override
 	public String getName()

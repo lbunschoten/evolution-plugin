@@ -15,6 +15,8 @@ public class DataProviderConfig implements Cloneable, Serializable
 	
 	private String name;
 	
+	private String defaultPath;
+	
 	private String path;
 	
 	private String min;
@@ -28,14 +30,20 @@ public class DataProviderConfig implements Cloneable, Serializable
 	 * 
 	 * @param name
 	 */
-	public DataProviderConfig(String name)
+	public DataProviderConfig(String name, String defaultPath)
 	{
 		this.name = name;
+		this.defaultPath = defaultPath;
 	}
 	
 	public String getName()
 	{
 		return name;
+	}
+	
+	public String getDefaultPath()
+	{
+		return defaultPath;
 	}
 	
 	public String getPath()

@@ -13,14 +13,16 @@ import jenkins.plugins.evolution.persistence.XPathReader;
  */
 public class SimianDataProvider extends DataProvider
 {
+	public static final String NAME = "Simian";
+
+	public static final String ID = NAME.toLowerCase();
+	
+	public static final String DEFAULT_PATH = "";
+	
 	public SimianDataProvider(InputStream inputStream)
 	{
 		super(inputStream);
 	}
-	
-	public static final String NAME = "Simian";
-	
-	public static final String ID = NAME.toLowerCase();
 	
 	@Override
 	public String getName()

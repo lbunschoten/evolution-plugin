@@ -81,7 +81,7 @@ public class EvolutionProjectAction extends Actionable implements Action
 	
 	public int getResultCount()
 	{
-		return readBuildResults().size();
+		return loadBuilds().size();
 	}
 	
 	/**
@@ -145,7 +145,7 @@ public class EvolutionProjectAction extends Actionable implements Action
 	{
 		GraphPointList graphPoints = new GraphPointList(project.getFullName());
 		
-		ArrayList<Build> builds = readBuildResults();
+		ArrayList<Build> builds = loadBuilds();
 		
 		for(Build build : builds)
 		{
@@ -202,7 +202,7 @@ public class EvolutionProjectAction extends Actionable implements Action
 	 */
 	private GraphPointList getDerivativeGraphPoints() throws ItemNotFoundException
 	{
-		ArrayList<Build> builds = readBuildResults();
+		ArrayList<Build> builds = loadBuilds();
 		
 		ScoreCalculator scoreCalculator = new ScoreCalculator(getConfig());
 		DerivativeCalculator derivativeCalculator = new DerivativeCalculator(builds.size());
@@ -242,27 +242,35 @@ public class EvolutionProjectAction extends Actionable implements Action
 		return null;
 	}
 	
+	public ArrayList<Build> loadBuilds()
+	{
+		ArrayList<Build> builds = readBuilds();
+		ArrayList<Build> usefulBuilds = new ArrayList<Build>();
+		
+		for(Build build : builds)
+		{
+			if(isUsefullBuild(build))
+			{
+				usefulBuilds.add(build);
+			}
+		}
+		
+		return usefulBuilds;
+	}
+	
 	/**
 	 * Loads evolution data from XML.
 	 * 
 	 * @return a Job object containing all required data from the XML file.
 	 */
-	private ArrayList<Build> readBuildResults()
+	private ArrayList<Build> readBuilds()
 	{
-		ArrayList<Build> validBuilds = new ArrayList<Build>();
+		ArrayList<Build> builds = new ArrayList<Build>();
 		
 		try
 		{
 			EvolutionReader reader = new EvolutionReader(new FileInputStream(getEvolutionFile()));
-			ArrayList<Build> builds = reader.read().getBuilds();
-			
-			for(Build build : builds)
-			{
-				if(isExistingBuild(build.getId()))
-				{
-					validBuilds.add(build);
-				}
-			}
+			builds = reader.read().getBuilds();
 		}
 		catch(PersistenceException e)
 		{
@@ -273,7 +281,27 @@ public class EvolutionProjectAction extends Actionable implements Action
 			Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).warning(e.getMessage());
 		}
 		
-		return validBuilds;
+		return builds;
+	}
+	
+	/**
+	 * Checks whether a build (still) exists.
+	 * 
+	 * @param buildNumber
+	 * @return build existence
+	 */
+	public boolean isUsefullBuild(Build build)
+	{
+		if(build.getResults().size() < 1)
+		{
+			return false;
+		}
+		if(!isExistingBuild(build.getId()))
+		{
+			return false;
+		}
+		
+		return true;
 	}
 	
 	/**

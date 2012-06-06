@@ -38,6 +38,10 @@ public class RegExpReader implements Reader<RegExpReader>
 			{
 				input = IOUtils.toString(inputStream, new EncodingUtil().getEncodingAsString());
 			}
+			else
+			{
+				throw new PersistenceException("InputStream is not available");
+			}
 		}
 		catch(IOException e)
 		{

@@ -55,7 +55,7 @@ public abstract class XStreamReader implements Reader<XStreamReader>
 		}
 		catch(IOException e)
 		{
-			Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).warning(e.getMessage());
+			Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).warning("Could not close inputstream");
 		}
 	}
 }

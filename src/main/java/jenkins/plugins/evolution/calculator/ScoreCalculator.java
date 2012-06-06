@@ -184,13 +184,13 @@ public class ScoreCalculator
 	 * @return DataProvider Configuration
 	 * @throws InvalidConfigException
 	 */
-	private DataProviderConfig getDataProviderConfig(String dataprovider) throws InvalidConfigException
+	private DataProviderConfig getDataProviderConfig(String dataProvider) throws InvalidConfigException
 	{
-		DataProviderConfig config = dataProviderConfigs.get(dataprovider);
+		DataProviderConfig config = dataProviderConfigs.get(dataProvider);
 		
 		if(config == null)
 		{
-			throw new InvalidConfigException("Unknown dataprovider " + dataprovider);
+			throw new InvalidConfigException("[Evolution] [ " + dataProvider + "] Unknown dataprovider: " + dataProvider);
 		}
 		
 		return config;
@@ -221,7 +221,9 @@ public class ScoreCalculator
 		}
 		catch(NumberFormatException e)
 		{
-			throw new InvalidConfigException("Invalid weight for " + dataProviderId);
+			Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).warning("[Evolution] [" + dataProviderId + "] Invalid weight: " + weight + "; Using 1 instead.");
+			
+			return 1;
 		}
 		
 		return weight;

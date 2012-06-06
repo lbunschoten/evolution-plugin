@@ -17,6 +17,8 @@ public class FindBugsDataProvider extends DataProvider
 	
 	public static final String ID = NAME.toLowerCase();
 	
+	public static final String DEFAULT_PATH = "**/findbugsXml.xml";
+	
 	public FindBugsDataProvider(InputStream inputStream)
 	{
 		super(inputStream);
