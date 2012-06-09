@@ -13,44 +13,26 @@ import jenkins.plugins.evolution.persistence.XPathReader;
  */
 public class CPDDataProvider extends DataProvider
 {
-	public static final String NAME = "CPD";
-	
-	public static final String ID = NAME.toLowerCase();
-	
-	public static final String DEFAULT_PATH = "**/cpd.xml";
-	
-	public CPDDataProvider(InputStream inputStream)
+	public CPDDataProvider(String id)
 	{
-		super(inputStream);
+		super(id);
 	}
 	
 	@Override
-	public String getName()
+	protected XPathReader getReader(InputStream inputStream)
 	{
-		return CPDDataProvider.NAME;
+		return new XPathReader(inputStream, "count(//file) - count(//duplication)");
 	}
 	
 	@Override
-	public String getId()
+	public Result getResult(InputStream inputStream) throws PersistenceException
 	{
-		return ID;
+		return new Result(getId(), readResult(inputStream));
 	}
 	
 	@Override
-	protected XPathReader getReader()
+	protected double readResult(InputStream inputStream) throws PersistenceException
 	{
-		return new XPathReader(getInputStream(), "count(//file) - count(//duplication)");
-	}
-	
-	@Override
-	public Result getResult() throws PersistenceException
-	{
-		return new Result(ID, readResult());
-	}
-	
-	@Override
-	protected double readResult() throws PersistenceException
-	{
-		return getReader().read().intValue();
+		return getReader(inputStream).read().intValue();
 	}
 }

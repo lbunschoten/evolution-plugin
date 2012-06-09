@@ -3,11 +3,9 @@ package jenkins.plugins.evolution.graph;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import org.jfree.chart.axis.NumberAxis;
-import org.jfree.chart.axis.NumberTickUnit;
 import org.jfree.chart.labels.CategoryToolTipGenerator;
 import org.jfree.chart.renderer.category.LineAndShapeRenderer;
 import org.jfree.chart.urls.CategoryURLGenerator;
-import org.jfree.data.Range;
 import org.jfree.data.category.CategoryDataset;
 
 /**
@@ -16,7 +14,7 @@ import org.jfree.data.category.CategoryDataset;
  * 
  * @author leon
  */
-public class ScoreLine extends AbstractLine
+public class EvolutionLine extends AbstractLine
 {
 	
 	/**
@@ -49,7 +47,7 @@ public class ScoreLine extends AbstractLine
 	 */
 	private static final double SERIES_SHAPE_OFFSET_BIG = SERIES_SHAPE_SIZE_BIG / 2;
 	
-	public ScoreLine(GraphPointList graphPoints)
+	public EvolutionLine(GraphPointList graphPoints)
 	{
 		super(graphPoints);
 	}
@@ -57,13 +55,7 @@ public class ScoreLine extends AbstractLine
 	@Override
 	protected NumberAxis getYAxis()
 	{
-		NumberAxis yAxis = new NumberAxis();
-		
-		yAxis.setLabel("Score (higher is better)");
-		yAxis.setRange(new Range(0, 10), true, false);
-		yAxis.setTickUnit(new NumberTickUnit(1), false, true);
-		
-		return yAxis;
+		return null;
 	}
 	
 	@Override
@@ -71,7 +63,7 @@ public class ScoreLine extends AbstractLine
 	{
 		int id = getId();
 		
-		renderer.setBaseFillPaint(Color.white);
+		renderer.setBaseFillPaint(Color.WHITE);
 		renderer.setDrawOutlines(false);
 		renderer.setSeriesStroke(id, new BasicStroke(STROKE_WIDTH));
 		renderer.setSeriesPaint(id, Color.ORANGE);

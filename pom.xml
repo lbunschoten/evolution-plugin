@@ -10,7 +10,8 @@
 	<artifactId>evolution</artifactId>
 	<packaging>hpi</packaging>
 	<name>Evolution Plugin</name>
-	<version>1.0</version>
+	<url>https://github.com/lbunschoten/evolution-plugin</url>
+	<version>1.1</version>
 
 	<developers>
 		<developer>

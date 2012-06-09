@@ -14,24 +14,19 @@ import java.util.Map.Entry;
 public class ScoreTooltipGenerator
 {
 	
-	public String generateTooltip(int buildNumber, HashMap<String, Double> scores)
+	public String generateTooltip(int buildNumber, double totalScore, HashMap<String, Double> scores)
 	{
 		StringBuilder stringBuilder = new StringBuilder();
 		String nl = System.getProperty("line.separator");
 		
 		stringBuilder.append("Build #" + buildNumber + nl + nl);
 		
+		stringBuilder.append("Score: " + round(totalScore) + nl + nl);
+		
 		for(Entry<String, Double> pluginScore : scores.entrySet())
 		{
-			if(pluginScore.getKey().equals("total"))
-			{
-				stringBuilder.append("Score: " + round(scores.get("total")) + nl + nl);
-			}
-			else
-			{
-				stringBuilder.append(round(pluginScore.getValue()));
-				stringBuilder.append(" (" + pluginScore.getKey() + ")" + nl);
-			}
+			stringBuilder.append(round(pluginScore.getValue()));
+			stringBuilder.append(" (" + pluginScore.getKey() + ")" + nl);
 		}
 		
 		return stringBuilder.toString();

@@ -1,19 +1,23 @@
 package jenkins.plugins.evolution;
 
+import hudson.FilePath;
 import hudson.model.AbstractBuild;
 import hudson.plugins.analysis.util.PluginLogger;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
-import jenkins.plugins.evolution.config.ConfigManager;
+import java.util.Map.Entry;
+import jenkins.plugins.evolution.config.EvolutionConfig;
+import jenkins.plugins.evolution.config.InvalidConfigException;
 import jenkins.plugins.evolution.dataprovider.DataProvider;
 import jenkins.plugins.evolution.domain.Job;
 import jenkins.plugins.evolution.domain.Result;
 import jenkins.plugins.evolution.persistence.EvolutionReader;
 import jenkins.plugins.evolution.persistence.EvolutionWriter;
 import jenkins.plugins.evolution.persistence.PersistenceException;
-import jenkins.plugins.evolution.util.EvolutionUtil;
 import jenkins.plugins.evolution.util.ItemNotFoundException;
 
 /**
@@ -28,18 +32,13 @@ public class BuildTaskController
 {
 	private AbstractBuild<?, ?> build;
 	
-	private ArrayList<DataProvider> dataProviders = new ArrayList<DataProvider>();
+	private EvolutionConfig config;
 	
 	private PluginLogger logger;
 	
-	private ConfigManager configManager;
-	
-	public BuildTaskController(AbstractBuild<?, ?> build, PluginLogger logger) throws ItemNotFoundException
+	public BuildTaskController(AbstractBuild<?, ?> build, EvolutionConfig config, PluginLogger logger) throws ItemNotFoundException
 	{
-		configManager = new ConfigManager(build.getProject().getFullName(), build.getWorkspace(), logger);
-		
-		dataProviders = configManager.getConfiguredDataProviders();
-		
+		this.config = config;
 		this.build = build;
 		this.logger = logger;
 	}
@@ -64,21 +63,53 @@ public class BuildTaskController
 	{
 		ArrayList<Result> results = new ArrayList<Result>();
 		
-		for(DataProvider p : dataProviders)
+		for(Entry<String, DataProvider> dataProvider : config.getConfiguredDataProviders().entrySet())
 		{
 			try
 			{
-				logger.log(Messages.BuildTaskController_readResults(p.getName()));
+				logger.log(Messages.BuildTaskController_readResults(dataProvider.getKey()));
 				
-				results.add(p.getResult());
+				String path = config.getDataProviderConfig(dataProvider.getKey()).getPath();
+				
+				results.add(dataProvider.getValue().getResult(getDataProviderFileStream(path)));
 			}
 			catch(PersistenceException e)
 			{
-				logger.log(Messages.BuildTaskController_readResults_PersistenceException(p.getName(), e.getMessage()));
+				logger.log(Messages.BuildTaskController_readResults_PersistenceException(dataProvider.getKey(), e.getMessage()));
+			}
+			catch(InvalidConfigException e)
+			{
+				logger.log(e.getMessage());
 			}
 		}
 		
 		return results;
+	}
+	
+	private InputStream getDataProviderFileStream(String path) throws InvalidConfigException
+	{
+		if(path != null && !path.isEmpty())
+		{
+			try
+			{
+				FilePath[] paths = build.getWorkspace().list(path);
+				
+				if(paths != null && paths.length > 0)
+				{
+					return paths[0].read();
+				}
+			}
+			catch(IOException e)
+			{
+				throw new InvalidConfigException("Could not load/find file at " + path);
+			}
+			catch(InterruptedException e)
+			{
+				throw new InvalidConfigException("Search for file \"" + path + "\" was interrupted");
+			}
+		}
+		
+		return null;
 	}
 	
 	private Job readEvolutionFile(File file)
@@ -108,13 +139,15 @@ public class BuildTaskController
 	
 	private boolean writeEvolutionFile(ArrayList<Result> results)
 	{
-		Job job = readEvolutionFile(getEvolutionFile());
+		File evolutionFile = EvolutionRecorder.getEvolutionFile(build.getProject());
+		
+		Job job = readEvolutionFile(evolutionFile);
 		
 		job.addBuild(build.getNumber(), results);
 		
 		try
 		{
-			EvolutionWriter writer = new EvolutionWriter(getEvolutionFile());
+			EvolutionWriter writer = new EvolutionWriter(evolutionFile);
 			writer.write(job);
 		}
 		catch(PersistenceException e)
@@ -125,13 +158,5 @@ public class BuildTaskController
 		}
 		
 		return true;
-	}
-	
-	private File getEvolutionFile()
-	{
-		// TODO As static value in Recorder
-		EvolutionUtil util = new EvolutionUtil();
-		
-		return util.getEvolutionFile(build.getProject());
 	}
 }

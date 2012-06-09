@@ -13,45 +13,27 @@ import jenkins.plugins.evolution.persistence.XPathReader;
  * @author leon
  */
 public class StyleCopDataProvider extends DataProvider
-{
-	public static final String NAME = "StyleCop";
-	
-	public static final String ID = NAME.toLowerCase();
-	
-	public static final String DEFAULT_PATH = "";
-	
-	public StyleCopDataProvider(InputStream inputStream)
+{	
+	public StyleCopDataProvider(String id)
 	{
-		super(inputStream);
+		super(id);
+	}
+
+	@Override
+	protected Reader<XPathReader> getReader(InputStream inputStream)
+	{
+		return new XPathReader(inputStream, "count(//Violation)");
 	}
 	
 	@Override
-	public String getName()
+	public Result getResult(InputStream inputStream) throws PersistenceException
 	{
-		return NAME;
+		return new Result(getId(), readResult(inputStream));
 	}
 	
 	@Override
-	public String getId()
+	protected double readResult(InputStream inputStream) throws PersistenceException
 	{
-		return ID;
-	}
-	
-	@Override
-	protected Reader<XPathReader> getReader()
-	{
-		return new XPathReader(getInputStream(), "count(//Violation)");
-	}
-	
-	@Override
-	public Result getResult() throws PersistenceException
-	{
-		return new Result(ID, readResult());
-	}
-	
-	@Override
-	protected double readResult() throws PersistenceException
-	{
-		return ((XPathReader) getReader()).read().doubleValue();
+		return ((XPathReader) getReader(inputStream)).read().doubleValue();
 	}
 }

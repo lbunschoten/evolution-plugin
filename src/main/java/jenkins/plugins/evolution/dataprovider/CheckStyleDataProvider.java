@@ -13,45 +13,27 @@ import jenkins.plugins.evolution.persistence.XPathReader;
  * @author leon
  */
 public class CheckStyleDataProvider extends DataProvider
-{
-	public static final String NAME = "CheckStyle";
-	
-	public static final String ID = NAME.toLowerCase();
-	
-	public static final String DEFAULT_PATH = "**/checkstyle-result.xml";
-	
-	public CheckStyleDataProvider(InputStream inputStream)
+{	
+	public CheckStyleDataProvider(String id)
 	{
-		super(inputStream);
+		super(id);
 	}
 	
 	@Override
-	public String getName()
+	protected Reader<XPathReader> getReader(InputStream inputStream)
 	{
-		return NAME;
+		return new XPathReader(inputStream, "count(//error)");
 	}
 	
 	@Override
-	public String getId()
+	public Result getResult(InputStream inputStream) throws PersistenceException
 	{
-		return ID;
+		return new Result(getId(), readResult(inputStream));
 	}
 	
 	@Override
-	protected Reader<XPathReader> getReader()
+	protected double readResult(InputStream inputStream) throws PersistenceException
 	{
-		return new XPathReader(getInputStream(), "count(//error)");
-	}
-	
-	@Override
-	public Result getResult() throws PersistenceException
-	{
-		return new Result(ID, readResult());
-	}
-	
-	@Override
-	protected double readResult() throws PersistenceException
-	{
-		return ((XPathReader) getReader()).read().doubleValue();
+		return ((XPathReader) getReader(inputStream)).read().doubleValue();
 	}
 }

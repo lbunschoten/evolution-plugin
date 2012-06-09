@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 import jenkins.plugins.evolution.dataprovider.CPDDataProvider;
 import jenkins.plugins.evolution.dataprovider.CheckStyleDataProvider;
 import jenkins.plugins.evolution.dataprovider.CoberturaDataProvider;
+import jenkins.plugins.evolution.dataprovider.DataProvider;
 import jenkins.plugins.evolution.dataprovider.FindBugsDataProvider;
 import jenkins.plugins.evolution.dataprovider.FxCopDataProvider;
 import jenkins.plugins.evolution.dataprovider.NCoverDataProvider;
@@ -28,26 +29,93 @@ public class EvolutionConfig implements Cloneable, Serializable
 	
 	private HashMap<String, DataProviderConfig> dataProviders = new HashMap<String, DataProviderConfig>();
 	
-	/**
-	 * Constructor for a new Evolution config. All available dataProviders, used
-	 * to provide data for the evolution plugin, are defined here.
-	 */
+	public enum DataProviderDescriptor
+	{
+		//formatter:off
+		CHECKSTYLE	("CheckStyle", 	"**/checkstyle-result.xml", 	new CheckStyleDataProvider("CHECKSTYLE")),
+		FINDBUGS	("FindBugs", 	"**/findbugsXml.xml", 			new FindBugsDataProvider("FINDBUGS")),
+		CPD			("CPD", 		"**/findbugsXml.xml", 			new CPDDataProvider("CPD")),
+		PMD			("PMD",			"**/findbugsXml.xml", 			new PMDDataProvider("PMD")),
+		COBERTURA	("Cobertura", 	"**/findbugsXml.xml", 			new CoberturaDataProvider("COBERTURA")),
+		NCOVER		("NCover", 		"**/findbugsXml.xml", 			new NCoverDataProvider("NCOVER")),
+		SIMIAN		("Simian", 		"**/findbugsXml.xml", 			new SimianDataProvider("SIMIAN")),
+		STYLECOP	("StyleCop", 	"**/findbugsXml.xml", 			new StyleCopDataProvider("STYLECOP")),
+		FXCOP		("FxCop", 		"**/findbugsXml.xml", 			new FxCopDataProvider("FXCOP"));
+		//formatter:on
+		
+		String name;
+		
+		String defaultPath;
+		
+		DataProvider dataProvider;
+				
+		DataProviderDescriptor(String name, String defaultPath, DataProvider dataProvider)
+		{
+			this.name = name;
+			this.defaultPath = defaultPath;
+			this.dataProvider = dataProvider;
+		}
+		
+		public String getName()
+		{
+			return name;
+		}
+		
+		public String getDefaultPath()
+		{
+			return defaultPath;
+		}
+		
+		public DataProvider getDataProvider()
+		{
+			return dataProvider;
+		}
+	}
+	
 	public EvolutionConfig()
 	{
-		dataProviders.put(CheckStyleDataProvider.ID, new DataProviderConfig(CheckStyleDataProvider.NAME, CheckStyleDataProvider.DEFAULT_PATH));
-		dataProviders.put(FindBugsDataProvider.ID, new DataProviderConfig(FindBugsDataProvider.NAME, FindBugsDataProvider.DEFAULT_PATH));
-		dataProviders.put(CoberturaDataProvider.ID, new DataProviderConfig(CoberturaDataProvider.NAME, CoberturaDataProvider.DEFAULT_PATH));
-		dataProviders.put(FxCopDataProvider.ID, new DataProviderConfig(FxCopDataProvider.NAME, FxCopDataProvider.DEFAULT_PATH));
-		dataProviders.put(PMDDataProvider.ID, new DataProviderConfig(PMDDataProvider.NAME, PMDDataProvider.DEFAULT_PATH));
-		dataProviders.put(CPDDataProvider.ID, new DataProviderConfig(CPDDataProvider.NAME, CPDDataProvider.DEFAULT_PATH));
-		dataProviders.put(SimianDataProvider.ID, new DataProviderConfig(SimianDataProvider.NAME, SimianDataProvider.DEFAULT_PATH));
-		dataProviders.put(NCoverDataProvider.ID, new DataProviderConfig(NCoverDataProvider.NAME, NCoverDataProvider.DEFAULT_PATH));
-		dataProviders.put(StyleCopDataProvider.ID, new DataProviderConfig(StyleCopDataProvider.NAME, StyleCopDataProvider.DEFAULT_PATH));
+		for(int i = 0; i < DataProviderDescriptor.values().length; i++)
+		{
+			DataProviderDescriptor dataProvider = DataProviderDescriptor.values()[i];
+			
+			dataProviders.put(dataProvider.toString(), new DataProviderConfig(dataProvider.getName(), dataProvider.getDefaultPath()));
+		}
 	}
 	
 	public HashMap<String, DataProviderConfig> getDataProviders()
 	{
-		return dataProviders;
+		HashMap<String, DataProviderConfig> configs = new HashMap<String, DataProviderConfig>();
+		
+		for(int i = 0; i < DataProviderDescriptor.values().length; i++)
+		{
+			DataProviderConfig config = dataProviders.get(DataProviderDescriptor.values()[i].toString());
+
+			configs.put(DataProviderDescriptor.values()[i].toString(), config);
+		}
+		
+		return configs;
+	}
+	
+	public HashMap<String, DataProvider> getConfiguredDataProviders()
+	{
+		HashMap<String, DataProvider> configuredDataProviders = new HashMap<String, DataProvider>();
+		
+		for(int i = 0; i < DataProviderDescriptor.values().length; i++)
+		{
+			DataProviderConfig config = dataProviders.get(DataProviderDescriptor.values()[i].toString());
+			
+			if(config.isFullyConfigured())
+			{
+				configuredDataProviders.put(DataProviderDescriptor.values()[i].toString(), DataProviderDescriptor.values()[i].getDataProvider());
+			}
+		}
+		
+		return configuredDataProviders;
+	}
+	
+	public DataProviderConfig getDataProviderConfig(String id)
+	{
+		return dataProviders.get(id);
 	}
 	
 	public boolean getScoreGraphEnabled()

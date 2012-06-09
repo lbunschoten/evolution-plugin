@@ -14,51 +14,27 @@ import jenkins.plugins.evolution.persistence.XPathReader;
  */
 public class CoberturaDataProvider extends DataProvider
 {
-	public static final String NAME = "Cobertura";
-	
-	public static final String ID = NAME.toLowerCase();
-	
-	public static final String DEFAULT_PATH = "**/coverage.xml";
-	
-	public CoberturaDataProvider(InputStream inputStream)
+	public CoberturaDataProvider(String id)
 	{
-		super(inputStream);
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String getName()
-	{
-		return NAME;
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String getId()
-	{
-		return ID;
+		super(id);
 	}
 	
 	@Override
-	protected Reader<XPathReader> getReader()
+	protected Reader<XPathReader> getReader(InputStream inputStream)
 	{
-		return new XPathReader(getInputStream(), "/coverage/@line-rate");
+		return new XPathReader(inputStream, "/coverage/@line-rate");
 	}
 	
 	@Override
-	public Result getResult() throws PersistenceException
+	public Result getResult(InputStream inputStream) throws PersistenceException
 	{
-		return new Result(ID, readResult());
+		return new Result(getId(), readResult(inputStream));
 	}
 	
 	@Override
-	protected double readResult() throws PersistenceException
+	protected double readResult(InputStream inputStream) throws PersistenceException
 	{
-		XPathReader reader = (XPathReader) getReader();
+		XPathReader reader = (XPathReader) getReader(inputStream);
 		
 		return reader.read().doubleValue() * 100;
 	}

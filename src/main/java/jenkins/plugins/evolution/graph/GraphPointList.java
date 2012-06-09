@@ -44,6 +44,16 @@ public class GraphPointList extends ArrayList<GraphPoint>
 		return false;
 	}
 	
+	public boolean add(int buildNumber, double value)
+	{
+		return add(new GraphPoint(buildNumber, value, ""));
+	}
+	
+	public boolean add(int buildNumber, double value, String tooltip)
+	{
+		return add(new GraphPoint(buildNumber, value, tooltip));
+	}
+	
 	public String getProjectName()
 	{
 		return projectName;

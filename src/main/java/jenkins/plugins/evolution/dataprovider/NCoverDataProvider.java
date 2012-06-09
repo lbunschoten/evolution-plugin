@@ -16,51 +16,33 @@ import jenkins.plugins.evolution.persistence.RegExpReader;
  * @author leon
  */
 public class NCoverDataProvider extends DataProvider
-{
-	public static final String NAME = "NCover";
-	
-	public static final String ID = NAME.toLowerCase();
-	
-	public static final String DEFAULT_PATH = "**/fullcoveragereport.html";
-	
-	public NCoverDataProvider(InputStream inputStream)
+{	
+	public NCoverDataProvider(String id)
 	{
-		super(inputStream);
+		super(id);
 	}
 	
 	@Override
-	public String getName()
+	protected RegExpReader getReader(InputStream inputStream)
 	{
-		return NAME;
+		return new RegExpReader(inputStream, "Symbol Coverage: <span class=\"[\\w\\s]+\">([\\d,]+)%<\\/span>");
 	}
 	
 	@Override
-	public String getId()
+	public Result getResult(InputStream inputStream) throws PersistenceException
 	{
-		return ID;
+		return new Result(getId(), readResult(inputStream));
 	}
 	
 	@Override
-	protected RegExpReader getReader()
-	{
-		return new RegExpReader(getInputStream(), "Symbol Coverage: <span class=\"[\\w\\s]+\">([\\d,]+)%<\\/span>");
-	}
-	
-	@Override
-	public Result getResult() throws PersistenceException
-	{
-		return new Result(ID, readResult());
-	}
-	
-	@Override
-	public double readResult() throws PersistenceException
+	public double readResult(InputStream inputStream) throws PersistenceException
 	{
 		double score = 0;
 		MatchResult result = null;
 		
 		try
 		{
-			 result = getReader().read();
+			 result = getReader(inputStream).read();
 			
 			if(result != null)
 			{

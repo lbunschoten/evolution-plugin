@@ -12,42 +12,34 @@ import jenkins.plugins.evolution.persistence.Reader;
  * @author leon
  */
 public abstract class DataProvider
-{
-	private InputStream inputStream;
+{	
+	private String id;
 	
-	public DataProvider(InputStream inputStream)
+	protected DataProvider(String id)
 	{
-		this.inputStream = inputStream;
+		this.id = id;
 	}
 	
-	protected InputStream getInputStream()
+	public String getId()
 	{
-		return inputStream;
+		return id;
 	}
 	
 	/**
-	 * @return The name of a data provider.
-	 */
-	public abstract String getName();
-	
-	/**
-	 * @return A unique identifier of a data provider.
-	 */
-	public abstract String getId();
-	
-	/**
+	 * @param inputStream
 	 * @return Creates a new reader instance.
 	 */
-	protected abstract Reader<?> getReader();
+	protected abstract Reader<?> getReader(InputStream inputStream);
 	
 	/**
 	 * Create a result object, containing the results of the retrieved data.
+	 * @param inputStream
 	 * 
 	 * @return results
 	 * @throws PersistenceException
 	 * @throws InvalidConfigException
 	 */
-	public abstract Result getResult() throws PersistenceException;
+	public abstract Result getResult(InputStream inputStream) throws PersistenceException;
 	
-	protected abstract double readResult() throws PersistenceException;
+	protected abstract double readResult(InputStream inputStream) throws PersistenceException;
 }

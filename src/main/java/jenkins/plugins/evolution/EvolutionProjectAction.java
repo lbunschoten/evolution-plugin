@@ -1,25 +1,30 @@
 package jenkins.plugins.evolution;
 
 import hudson.model.Action;
+import hudson.model.Result;
+import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
 import hudson.model.Actionable;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map.Entry;
 import java.util.logging.Logger;
+import jenkins.plugins.evolution.calculator.DataProviderCalculator;
 import jenkins.plugins.evolution.calculator.DerivativeCalculator;
-import jenkins.plugins.evolution.calculator.ScoreCalculator;
+import jenkins.plugins.evolution.calculator.EvolutionCalculator;
 import jenkins.plugins.evolution.config.EvolutionConfig;
 import jenkins.plugins.evolution.config.InvalidConfigException;
+import jenkins.plugins.evolution.dataprovider.DataProvider;
 import jenkins.plugins.evolution.domain.Build;
+import jenkins.plugins.evolution.graph.DataProviderLine;
 import jenkins.plugins.evolution.graph.DerivativeLine;
 import jenkins.plugins.evolution.graph.EvolutionGraph;
+import jenkins.plugins.evolution.graph.EvolutionLine;
 import jenkins.plugins.evolution.graph.GraphPoint;
 import jenkins.plugins.evolution.graph.GraphPointList;
-import jenkins.plugins.evolution.graph.ScoreLine;
 import jenkins.plugins.evolution.graph.ScoreTooltipGenerator;
 import jenkins.plugins.evolution.persistence.EvolutionReader;
 import jenkins.plugins.evolution.persistence.PersistenceException;
@@ -74,11 +79,6 @@ public class EvolutionProjectAction extends Actionable implements Action
 		return "evolution";
 	}
 	
-	public File getEvolutionFile()
-	{
-		return new EvolutionUtil().getEvolutionFile(project);
-	}
-	
 	public int getResultCount()
 	{
 		return loadBuilds().size();
@@ -91,14 +91,22 @@ public class EvolutionProjectAction extends Actionable implements Action
 	 * @param rsp
 	 * @throws IOException
 	 * @throws ItemNotFoundException
+	 * @throws InvalidConfigException
 	 */
-	public void doScoreGraph(StaplerRequest req, StaplerResponse rsp) throws IOException, ItemNotFoundException
+	public void doScoreGraph(StaplerRequest req, StaplerResponse rsp) throws IOException
 	{
-		EvolutionGraph scoreGraph = new EvolutionGraph(Messages.EvolutionProjectAction_scoreGraphName());
+		EvolutionGraph graph = new EvolutionGraph(Messages.EvolutionProjectAction_scoreGraphName());
 		
-		scoreGraph.addLine(new ScoreLine(getScoreGraphPoints(new ScoreCalculator(getConfig()))));
+		// Load config (quit on failure)
+		EvolutionConfig config = getConfig();
+		if(config == null)
+		{
+			return;
+		}
 		
-		scoreGraph.doPng(req, rsp);
+		addScoreGraphPoints(graph, config);
+		
+		graph.doPng(req, rsp);
 	}
 	
 	/**
@@ -109,14 +117,22 @@ public class EvolutionProjectAction extends Actionable implements Action
 	 * @param rsp
 	 * @throws IOException
 	 * @throws ItemNotFoundException
+	 * @throws InvalidConfigException
 	 */
-	public void doScoreGraphMap(StaplerRequest req, StaplerResponse rsp) throws IOException, ItemNotFoundException
+	public void doScoreGraphMap(StaplerRequest req, StaplerResponse rsp) throws IOException, ItemNotFoundException, InvalidConfigException
 	{
-		EvolutionGraph scoreGraph = new EvolutionGraph(Messages.EvolutionProjectAction_scoreGraphName());
+		EvolutionGraph graph = new EvolutionGraph(Messages.EvolutionProjectAction_scoreGraphName());
 		
-		scoreGraph.addLine(new ScoreLine(getScoreGraphPoints(new ScoreCalculator(getConfig()))));
+		// Load config (quit on failure)
+		EvolutionConfig config = getConfig();
+		if(config == null)
+		{
+			return;
+		}
 		
-		scoreGraph.doMap(req, rsp);
+		addScoreGraphPoints(graph, config);
+		
+		graph.doMap(req, rsp);
 	}
 	
 	/**
@@ -126,61 +142,125 @@ public class EvolutionProjectAction extends Actionable implements Action
 	 * @param rsp
 	 * @throws IOException
 	 * @throws ItemNotFoundException
-	 */
-	public void doDerivativeGraph(StaplerRequest req, StaplerResponse rsp) throws IOException, ItemNotFoundException
-	{
-		EvolutionGraph derivativeGraph = new EvolutionGraph(Messages.EvolutionProjectAction_derivativateGraphName());
-		
-		DerivativeLine line = new DerivativeLine(getDerivativeGraphPoints());
-		
-		derivativeGraph.addLine(line);
-		
-		derivativeGraph.doPng(req, rsp);
-	}
-	
-	/**
-	 * @return A list of points which should be displayed in the graph.
-	 */
-	private GraphPointList getScoreGraphPoints(ScoreCalculator calculator)
-	{
-		GraphPointList graphPoints = new GraphPointList(project.getFullName());
-		
-		ArrayList<Build> builds = loadBuilds();
-		
-		for(Build build : builds)
-		{
-			graphPoints.add(getScoreGraphPointForBuild(calculator, build));
-		}
-		
-		return graphPoints;
-	}
-	
-	/**
-	 * Create a new GraphPoint for a build. Also the total score is added to the
-	 * GraphPoint.
-	 * 
-	 * @param build
-	 * @return GraphPoint
 	 * @throws InvalidConfigException
 	 */
-	private GraphPoint getScoreGraphPointForBuild(ScoreCalculator calculator, Build build)
+	public void doDerivativeGraph(StaplerRequest req, StaplerResponse rsp) throws IOException, ItemNotFoundException, InvalidConfigException
 	{
-		try
+		EvolutionGraph graph = new EvolutionGraph(Messages.EvolutionProjectAction_derivativateGraphName());
+		
+		// Load config (quit on failure)
+		EvolutionConfig config = getConfig();
+		if(config == null)
 		{
-			HashMap<String, Double> scores = calculator.calculate(build);
-			
-			double totalScore = scores.get("total");
-			
-			String tooltip = generateScoreTooltip(build.getId(), scores);
-			
-			return new GraphPoint(build.getId(), totalScore, tooltip);
-		}
-		catch(InvalidConfigException e)
-		{
-			Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).warning(e.getMessage());
+			return;
 		}
 		
-		return null;
+		addDerivativeGraphPoints(graph, config);
+		
+		graph.doPng(req, rsp);
+	}
+	
+	private EvolutionGraph addScoreGraphPoints(EvolutionGraph scoreGraph, EvolutionConfig config)
+	{
+		double totalScore = 0;
+		HashMap<String, Double> dataProviderScores;
+		
+		// Create lists
+		HashMap<String, GraphPointList> dataProviderGraphPoints = new HashMap<String, GraphPointList>();
+		
+		for(Entry<String, DataProvider> dataProvider : config.getConfiguredDataProviders().entrySet())
+		{
+			dataProviderGraphPoints.put(dataProvider.getKey(), new GraphPointList(project.getFullName()));
+		}
+		
+		GraphPointList evolutionGraphPoints = new GraphPointList(project.getFullName());
+		
+		// Load builds
+		ArrayList<Build> builds = loadBuilds();
+		
+		// Create calculators
+		DataProviderCalculator dataProviderCalculator = new DataProviderCalculator(config);
+		EvolutionCalculator evolutionCalculator = new EvolutionCalculator(config);
+		
+		// Calculate scores for each build
+		for(Build build : builds)
+		{
+			try
+			{
+				dataProviderScores = calculateDataProviderScoresForBuild(dataProviderCalculator, build);
+				
+				for(Entry<String, Double> dataProviderScore : dataProviderScores.entrySet())
+				{
+					GraphPointList list = dataProviderGraphPoints.get(dataProviderScore.getKey());
+					
+					list.add(build.getId(), dataProviderScore.getValue());
+				}
+				
+				totalScore = calculateEvolutionScore(evolutionCalculator, dataProviderScores);
+				
+				evolutionGraphPoints.add(build.getId(), totalScore, generateScoreTooltip(build.getId(), totalScore, dataProviderScores));
+			}
+			catch(InvalidConfigException e)
+			{
+				Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).warning(e.getMessage());
+			}
+		}
+		
+		scoreGraph.addLine(new EvolutionLine(evolutionGraphPoints));
+		
+		for(Entry<String, GraphPointList> list : dataProviderGraphPoints.entrySet())
+		{
+			scoreGraph.addLine(new DataProviderLine(list.getValue()));
+		}
+		
+		return scoreGraph;
+	}
+	
+	public EvolutionGraph addDerivativeGraphPoints(EvolutionGraph graph, EvolutionConfig config)
+	{
+		double totalScore = 0;
+		HashMap<String, Double> dataProviderScores;
+		
+		GraphPointList graphPointList = new GraphPointList(project.getFullName());
+		
+		// Load builds
+		ArrayList<Build> builds = loadBuilds();
+		
+		// Create calculators
+		DataProviderCalculator dataProviderCalculator = new DataProviderCalculator(config);
+		EvolutionCalculator evolutionCalculator = new EvolutionCalculator(config);
+		DerivativeCalculator derivativeCalculator = new DerivativeCalculator(builds.size());
+		
+		// Calculate scores for each build
+		for(Build build : builds)
+		{
+			try
+			{
+				dataProviderScores = calculateDataProviderScoresForBuild(dataProviderCalculator, build);
+				
+				totalScore = calculateEvolutionScore(evolutionCalculator, dataProviderScores);
+				
+				graphPointList.add(getDerivativeGraphPointForBuild(derivativeCalculator, build, totalScore));
+			}
+			catch(InvalidConfigException e)
+			{
+				Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).warning(e.getMessage());
+			}
+		}
+		
+		graph.addLine(new DerivativeLine(graphPointList));
+		
+		return graph;
+	}
+	
+	private HashMap<String, Double> calculateDataProviderScoresForBuild(DataProviderCalculator calculator, Build build)
+	{
+		return calculator.calculate(build);
+	}
+	
+	private double calculateEvolutionScore(EvolutionCalculator calculator, HashMap<String, Double> dataProviderScores) throws InvalidConfigException
+	{
+		return calculator.calculate(dataProviderScores);
 	}
 	
 	/**
@@ -191,35 +271,9 @@ public class EvolutionProjectAction extends Actionable implements Action
 	 * @param scores
 	 * @return a tooltip
 	 */
-	private String generateScoreTooltip(int buildNumber, HashMap<String, Double> scores)
+	private String generateScoreTooltip(int buildNumber, double totalScore, HashMap<String, Double> scores)
 	{
-		return scoreTooltipGenerator.generateTooltip(buildNumber, scores);
-	}
-	
-	/**
-	 * @return A list of points which should be displayed in the graph.
-	 * @throws ItemNotFoundException
-	 */
-	private GraphPointList getDerivativeGraphPoints() throws ItemNotFoundException
-	{
-		ArrayList<Build> builds = loadBuilds();
-		
-		ScoreCalculator scoreCalculator = new ScoreCalculator(getConfig());
-		DerivativeCalculator derivativeCalculator = new DerivativeCalculator(builds.size());
-		
-		GraphPointList derivativeGraphPoints = new GraphPointList(project.getFullName());
-		
-		for(Build build : builds)
-		{
-			GraphPoint scoreGraphPoint = getScoreGraphPointForBuild(scoreCalculator, build);
-			
-			if(scoreGraphPoint != null)
-			{
-				derivativeGraphPoints.add(getDerivativeGraphPointForBuild(derivativeCalculator, build, scoreGraphPoint.getValue()));
-			}
-		}
-		
-		return derivativeGraphPoints;
+		return scoreTooltipGenerator.generateTooltip(buildNumber, totalScore, scores);
 	}
 	
 	/**
@@ -249,7 +303,7 @@ public class EvolutionProjectAction extends Actionable implements Action
 		
 		for(Build build : builds)
 		{
-			if(isUsefullBuild(build))
+			if(isUsefulBuild(build))
 			{
 				usefulBuilds.add(build);
 			}
@@ -269,7 +323,7 @@ public class EvolutionProjectAction extends Actionable implements Action
 		
 		try
 		{
-			EvolutionReader reader = new EvolutionReader(new FileInputStream(getEvolutionFile()));
+			EvolutionReader reader = new EvolutionReader(new FileInputStream(EvolutionRecorder.getEvolutionFile(project)));
 			builds = reader.read().getBuilds();
 		}
 		catch(PersistenceException e)
@@ -290,13 +344,13 @@ public class EvolutionProjectAction extends Actionable implements Action
 	 * @param buildNumber
 	 * @return build existence
 	 */
-	public boolean isUsefullBuild(Build build)
+	public boolean isUsefulBuild(Build build)
 	{
 		if(build.getResults().size() < 1)
 		{
 			return false;
 		}
-		if(!isExistingBuild(build.getId()))
+		if(!isSuccesfulBuild(build.getId()))
 		{
 			return false;
 		}
@@ -310,9 +364,21 @@ public class EvolutionProjectAction extends Actionable implements Action
 	 * @param buildNumber
 	 * @return build existence
 	 */
-	public boolean isExistingBuild(int buildNumber)
+	public boolean isSuccesfulBuild(int buildNumber)
 	{
-		return project.getBuildByNumber(buildNumber) != null;
+		AbstractBuild<?, ?> build = project.getBuildByNumber(buildNumber);
+		
+		if(build == null)
+		{
+			return false;
+		}
+		
+		if(build.getResult().isBetterOrEqualTo(Result.UNSTABLE))
+		{
+			return true;
+		}
+		
+		return false;
 	}
 	
 	/**
@@ -321,10 +387,19 @@ public class EvolutionProjectAction extends Actionable implements Action
 	 * @return config
 	 * @throws ItemNotFoundException
 	 */
-	public EvolutionConfig getConfig() throws ItemNotFoundException
+	public EvolutionConfig getConfig()
 	{
 		EvolutionUtil util = new EvolutionUtil();
 		
-		return util.getEvolutionRecorder(project).getConfig();
+		try
+		{
+			return util.getEvolutionRecorder(project).getConfig();
+		}
+		catch(ItemNotFoundException e)
+		{
+			Logger.getLogger("Could not load config");
+		}
+		
+		return null;
 	}
 }

@@ -64,7 +64,7 @@ public class DataProviderTest
 		{
 			System.out.println("[" + dataProviders.get(i).getId() + "] Test reading " + dataProviders.get(i).getName() + " results");
 			
-			assertEquals(expectedValues.get(i), dataProviders.get(i).getResult().getData(), 0);
+			assertEquals(expectedValues.get(i), dataProviders.get(i).getResult(null).getData(), 0);
 		}
 	}
 	
@@ -72,7 +72,7 @@ public class DataProviderTest
 	public void testInvalidCheckStyleFile() throws FileNotFoundException, PersistenceException, InvalidConfigException
 	{
 		CheckStyleDataProvider dataProvider = new CheckStyleDataProvider(new FileInputStream("src/test/resources/invalid.xml"));
-		dataProvider.getResult().getData();
+		dataProvider.getResult(null).getData();
 	}
 	
 	@Test(expected = FileNotFoundException.class)
@@ -85,7 +85,7 @@ public class DataProviderTest
 	public void testInvalidFindBugsFile() throws FileNotFoundException, PersistenceException, InvalidConfigException
 	{
 		FindBugsDataProvider dataProvider = new FindBugsDataProvider(new FileInputStream("src/test/resources/invalid.xml"));
-		dataProvider.getResult().getData();
+		dataProvider.getResult(null).getData();
 	}
 	
 	@Test(expected = FileNotFoundException.class)
@@ -98,7 +98,7 @@ public class DataProviderTest
 	public void testInvalidCoberturaFile() throws FileNotFoundException, PersistenceException, InvalidConfigException
 	{
 		CoberturaDataProvider dataProvider = new CoberturaDataProvider(new FileInputStream("src/test/resources/invalid.xml"));
-		dataProvider.getResult().getData();
+		dataProvider.getResult(null).getData();
 	}
 	
 	@Test(expected = FileNotFoundException.class)
@@ -111,7 +111,7 @@ public class DataProviderTest
 	public void testInvalidPMDFile() throws FileNotFoundException, PersistenceException, InvalidConfigException
 	{
 		PMDDataProvider dataProvider = new PMDDataProvider(new FileInputStream("src/test/resources/invalid.xml"));
-		dataProvider.getResult().getData();
+		dataProvider.getResult(null).getData();
 	}
 	
 	@Test(expected = FileNotFoundException.class)
@@ -124,7 +124,7 @@ public class DataProviderTest
 	public void testInvalidCPDFile() throws FileNotFoundException, PersistenceException, InvalidConfigException
 	{
 		CPDDataProvider dataProvider = new CPDDataProvider(new FileInputStream("src/test/resources/invalid.xml"));
-		dataProvider.getResult().getData();
+		dataProvider.getResult(null).getData();
 	}
 	
 	@Test(expected = FileNotFoundException.class)
@@ -138,7 +138,7 @@ public class DataProviderTest
 	public void testInvalidNCoverFile() throws FileNotFoundException, PersistenceException, InvalidConfigException
 	{
 		NCoverDataProvider dataProvider = new NCoverDataProvider(new FileInputStream("src/test/resources/invalid.xml"));
-		dataProvider.getResult().getData();
+		dataProvider.getResult(null).getData();
 	}
 	
 	@Test(expected = FileNotFoundException.class)
@@ -151,7 +151,7 @@ public class DataProviderTest
 	public void testInvalidSimianFile() throws FileNotFoundException, PersistenceException, InvalidConfigException
 	{
 		SimianDataProvider dataProvider = new SimianDataProvider(new FileInputStream("src/test/resources/invalid.xml"));
-		dataProvider.getResult().getData();
+		dataProvider.getResult(null).getData();
 	}
 	
 	@Test(expected = FileNotFoundException.class)
@@ -164,7 +164,7 @@ public class DataProviderTest
 	public void testInvalidFxCopFile() throws FileNotFoundException, PersistenceException, InvalidConfigException
 	{
 		FxCopDataProvider dataProvider = new FxCopDataProvider(new FileInputStream("src/test/resources/invalid.xml"));
-		dataProvider.getResult().getData();
+		dataProvider.getResult(null).getData();
 	}
 	
 	@Test(expected = FileNotFoundException.class)
@@ -177,7 +177,7 @@ public class DataProviderTest
 	public void testInvalidStyleCopFile() throws FileNotFoundException, PersistenceException, InvalidConfigException
 	{
 		StyleCopDataProvider dataProvider = new StyleCopDataProvider(new FileInputStream("src/test/resources/invalid.xml"));
-		dataProvider.getResult().getData();
+		dataProvider.getResult(null).getData();
 	}
 	
 	@Test(expected = FileNotFoundException.class)

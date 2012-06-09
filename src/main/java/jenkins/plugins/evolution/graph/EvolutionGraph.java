@@ -8,9 +8,12 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.CategoryAxis;
 import org.jfree.chart.axis.CategoryLabelPositions;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.axis.NumberTickUnit;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.renderer.category.LineAndShapeRenderer;
+import org.jfree.data.Range;
 import org.jfree.ui.RectangleInsets;
 
 /**
@@ -78,7 +81,7 @@ public class EvolutionGraph extends Graph
 	@Override
 	protected JFreeChart createGraph()
 	{
-		final JFreeChart chart = ChartFactory.createLineChart(name, null, null, null, PlotOrientation.VERTICAL, false, true, true);
+		final JFreeChart chart = ChartFactory.createLineChart(name, null, null, null, PlotOrientation.VERTICAL, true, true, true);
 		chart.setBackgroundPaint(Color.WHITE);
 		
 		loadPlot(chart);
@@ -98,7 +101,6 @@ public class EvolutionGraph extends Graph
 		CategoryPlot plot = chart.getCategoryPlot();
 		
 		plot.setBackgroundPaint(Color.WHITE);
-		// plot.setForegroundAlpha(0.8f);
 		plot.setRangeGridlinesVisible(true);
 		plot.setRangeGridlinePaint(Color.BLACK);
 		plot.setDomainAxis(getXAxis());
@@ -107,14 +109,21 @@ public class EvolutionGraph extends Graph
 	
 	private void loadLines(CategoryPlot plot)
 	{
+		plot.setRangeAxis(getDefaultYAxis());
+		
 		for(AbstractLine line : lines)
 		{
 			int id = line.getId();
 			
 			plot.setDataset(id, line.createDataset());
-			plot.setRangeAxis(id, line.getYAxis());
+			
+			if(line.getYAxis() != null)
+			{
+				plot.setRangeAxis(id, line.getYAxis());
+				plot.mapDatasetToRangeAxis(id, id);
+			}
+			
 			plot.setRenderer(id, line.getLineAndShapeRenderer((LineAndShapeRenderer) plot.getRenderer(id)));
-			plot.mapDatasetToRangeAxis(id, id);
 		}
 	}
 	
@@ -134,4 +143,16 @@ public class EvolutionGraph extends Graph
 		
 		return domainAxis;
 	}
+	
+	protected NumberAxis getDefaultYAxis()
+	{
+		NumberAxis yAxis = new NumberAxis();
+		
+		yAxis.setLabel("Score (higher is better)");
+		yAxis.setRange(new Range(0, 10), true, false);
+		yAxis.setTickUnit(new NumberTickUnit(1), false, true);
+		
+		return yAxis;
+	}
+	
 }

@@ -1,8 +1,5 @@
 package jenkins.plugins.evolution;
 
-import jenkins.model.Jenkins;
-import jenkins.plugins.evolution.config.EvolutionConfig;
-import jenkins.plugins.evolution.util.ItemNotFoundException;
 import hudson.Launcher;
 import hudson.model.BuildListener;
 import hudson.model.AbstractBuild;
@@ -12,6 +9,10 @@ import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.BuildStepMonitor;
 import hudson.tasks.Publisher;
 import hudson.tasks.Recorder;
+import java.io.File;
+import jenkins.model.Jenkins;
+import jenkins.plugins.evolution.config.EvolutionConfig;
+import jenkins.plugins.evolution.util.ItemNotFoundException;
 
 /**
  * <p>
@@ -36,12 +37,14 @@ public class EvolutionRecorder extends Recorder
 	
 	private BuildTaskController controller;
 	
+	private static final String EVOLUTION_FILENAME = "evolution.xml";
+	
 	/**
 	 * @return config
 	 */
 	public EvolutionConfig getConfig()
 	{
-		return config;
+		return config;	
 	}
 	
 	/**
@@ -71,7 +74,7 @@ public class EvolutionRecorder extends Recorder
 		
 		try
 		{
-			controller = new BuildTaskController(build, logger);
+			controller = new BuildTaskController(build, config, logger);
 			
 			result = controller.build();
 		}
@@ -103,6 +106,11 @@ public class EvolutionRecorder extends Recorder
 	public EvolutionProjectAction getProjectAction(AbstractProject<?, ?> project)
 	{
 		return new EvolutionProjectAction(project);
+	}
+	
+	static File getEvolutionFile(AbstractProject<?, ?> project)
+	{
+		return new File(project.getRootDir().getAbsolutePath(), EVOLUTION_FILENAME);
 	}
 	
 	/**

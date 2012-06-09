@@ -2,7 +2,7 @@ package jenkins.plugins.evolution;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-import jenkins.plugins.evolution.calculator.ScoreCalculator;
+import jenkins.plugins.evolution.calculator.EvolutionCalculator;
 import jenkins.plugins.evolution.config.DataProviderConfig;
 import jenkins.plugins.evolution.config.EvolutionConfig;
 import jenkins.plugins.evolution.config.InvalidConfigException;
@@ -25,7 +25,7 @@ public class EvolutionScoreCalculatorTest
 		config.getDataProviders().put("C", getDataProviderConfig("10", "0", "1"));
 		config.getDataProviders().put("D", getDataProviderConfig("10", "0", "1"));
 		
-		ScoreCalculator calc = new ScoreCalculator(config);
+		EvolutionCalculator calc = new EvolutionCalculator(config);
 		
 		assertEquals(5, calc.calculate(build).get("total"), 0);
 	}
@@ -42,7 +42,7 @@ public class EvolutionScoreCalculatorTest
 		config.getDataProviders().put("C", getDataProviderConfig("10", "0", "2"));
 		config.getDataProviders().put("D", getDataProviderConfig("10", "0", "1"));
 		
-		ScoreCalculator calc = new ScoreCalculator(config);
+		EvolutionCalculator calc = new EvolutionCalculator(config);
 		
 		assertEquals(5, calc.calculate(build).get("total"), 0);
 		
@@ -53,7 +53,7 @@ public class EvolutionScoreCalculatorTest
 		config2.getDataProviders().put("C", getDataProviderConfig("10", "0", "2"));
 		config2.getDataProviders().put("D", getDataProviderConfig("10", "0", "1"));
 		
-		ScoreCalculator calc2 = new ScoreCalculator(config2);
+		EvolutionCalculator calc2 = new EvolutionCalculator(config2);
 		
 		if(calc2.calculate(build).get("total") != 5)
 		{
@@ -73,7 +73,7 @@ public class EvolutionScoreCalculatorTest
 		config.getDataProviders().put("C", getDataProviderConfig("10", "0", "-1"));
 		config.getDataProviders().put("D", getDataProviderConfig("10", "0", "1"));
 		
-		ScoreCalculator calc = new ScoreCalculator(config);
+		EvolutionCalculator calc = new EvolutionCalculator(config);
 		
 		assertEquals(5, calc.calculate(build).get("total"), 0);
 	}
@@ -90,7 +90,7 @@ public class EvolutionScoreCalculatorTest
 		config.getDataProviders().put("C", getDataProviderConfig("10", "0", "0"));
 		config.getDataProviders().put("D", getDataProviderConfig("10", "0", "0"));
 		
-		ScoreCalculator calc = new ScoreCalculator(config);
+		EvolutionCalculator calc = new EvolutionCalculator(config);
 		
 		assertEquals(5, calc.calculate(build).get("total"), 0);
 	}
@@ -107,7 +107,7 @@ public class EvolutionScoreCalculatorTest
 		config.getDataProviders().put("C", getDataProviderConfig("0", "10", "1"));
 		config.getDataProviders().put("D", getDataProviderConfig("10", "0", "1"));
 		
-		ScoreCalculator calc = new ScoreCalculator(config);
+		EvolutionCalculator calc = new EvolutionCalculator(config);
 		
 		assertEquals(5, calc.calculate(build).get("total"), 0);
 	}
@@ -124,7 +124,7 @@ public class EvolutionScoreCalculatorTest
 		config.getDataProviders().put("C", getDataProviderConfig("0", "10", "1"));
 		config.getDataProviders().put("D", getDataProviderConfig("100", "50", "1"));
 		
-		ScoreCalculator calc = new ScoreCalculator(config);
+		EvolutionCalculator calc = new EvolutionCalculator(config);
 		
 		assertEquals(5, calc.calculate(build).get("total"), 0);
 		
@@ -137,7 +137,7 @@ public class EvolutionScoreCalculatorTest
 		config2.getDataProviders().put("C", getDataProviderConfig("0", "10", "1"));
 		config2.getDataProviders().put("D", getDataProviderConfig("50", "100", "1"));
 		
-		calc = new ScoreCalculator(config2);
+		calc = new EvolutionCalculator(config2);
 		
 		assertEquals(5, calc.calculate(build).get("total"), 0);
 	}
@@ -154,7 +154,7 @@ public class EvolutionScoreCalculatorTest
 		config.getDataProviders().put("C", getDataProviderConfig("10", "-1", "1"));
 		config.getDataProviders().put("D", getDataProviderConfig("10", "0", "1"));
 		
-		ScoreCalculator calc = new ScoreCalculator(config);
+		EvolutionCalculator calc = new EvolutionCalculator(config);
 		
 		assertEquals(5, calc.calculate(build).get("total"), 0);
 	}
@@ -171,7 +171,7 @@ public class EvolutionScoreCalculatorTest
 		config.getDataProviders().put("C", getDataProviderConfig("1", "1", "1"));
 		config.getDataProviders().put("D", getDataProviderConfig("10", "0", "1"));
 		
-		ScoreCalculator calc = new ScoreCalculator(config);
+		EvolutionCalculator calc = new EvolutionCalculator(config);
 		
 		assertEquals(5, calc.calculate(build).get("total"), 0);
 	}
@@ -186,7 +186,7 @@ public class EvolutionScoreCalculatorTest
 		config.getDataProviders().put("B", getDataProviderConfig("10", "0", "1"));
 		config.getDataProviders().put("C", getDataProviderConfig("10", "0", "1"));
 		
-		ScoreCalculator calc = new ScoreCalculator(config);
+		EvolutionCalculator calc = new EvolutionCalculator(config);
 		
 		assertEquals(5, calc.calculate(build).get("total"), 0);
 	}

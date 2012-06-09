@@ -12,40 +12,22 @@ import jenkins.plugins.evolution.persistence.XPathReader;
  * @author leon
  */
 public class FindBugsDataProvider extends DataProvider
-{
-	public static final String NAME = "FindBugs";
-	
-	public static final String ID = NAME.toLowerCase();
-	
-	public static final String DEFAULT_PATH = "**/findbugsXml.xml";
-	
-	public FindBugsDataProvider(InputStream inputStream)
+{	
+	public FindBugsDataProvider(String id)
 	{
-		super(inputStream);
+		super(id);
 	}
 	
 	@Override
-	public String getName()
+	protected XPathReader getReader(InputStream inputStream)
 	{
-		return FindBugsDataProvider.NAME;
+		return new XPathReader(inputStream, "count(//BugInstance)");
 	}
 	
 	@Override
-	public String getId()
+	public Result getResult(InputStream inputStream) throws PersistenceException
 	{
-		return FindBugsDataProvider.ID;
-	}
-	
-	@Override
-	protected XPathReader getReader()
-	{
-		return new XPathReader(getInputStream(), "count(//BugInstance)");
-	}
-	
-	@Override
-	public Result getResult() throws PersistenceException
-	{
-		return new Result(ID, readResult());
+		return new Result(getId(), readResult(inputStream));
 	}
 	
 	/**
@@ -53,8 +35,8 @@ public class FindBugsDataProvider extends DataProvider
 	 * @throws PersistenceException
 	 */
 	@Override
-	protected double readResult() throws PersistenceException
+	protected double readResult(InputStream inputStream) throws PersistenceException
 	{
-		return getReader().read().intValue();
+		return getReader(inputStream).read().intValue();
 	}
 }

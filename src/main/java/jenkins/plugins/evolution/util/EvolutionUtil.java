@@ -1,9 +1,7 @@
 package jenkins.plugins.evolution.util;
 
-import hudson.model.TopLevelItem;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
-import java.io.File;
 import jenkins.model.Jenkins;
 import jenkins.plugins.evolution.EvolutionRecorder;
 
@@ -51,10 +49,5 @@ public class EvolutionUtil
 		}
 		
 		return recorder;
-	}
-	
-	public File getEvolutionFile(AbstractProject<?, ?> project)
-	{
-		return new File(Jenkins.getInstance().getRootDirFor((TopLevelItem) project).getAbsolutePath() + "/evolution.xml");
 	}
 }
