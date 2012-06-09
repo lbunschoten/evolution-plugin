@@ -21,10 +21,14 @@ public abstract class AbstractLine
 	
 	private int id;
 	
+	private String label = "";
+	
 	private GraphPointList graphPoints;
 	
-	public AbstractLine(GraphPointList graphPoints)
+	public AbstractLine(String label, GraphPointList graphPoints)
 	{
+		this.label = label;
+		
 		this.graphPoints = graphPoints;
 	}
 	
@@ -34,7 +38,7 @@ public abstract class AbstractLine
 	 * 
 	 * @return DataSetBuilder
 	 */
-	protected CategoryDataset createDataset()
+	protected CategoryDataset createDataset(String label)
 	{
 		DataSetBuilder<String, NumberOnlyBuildLabel> dsb = new DataSetBuilder<String, ChartUtil.NumberOnlyBuildLabel>();
 		
@@ -42,7 +46,7 @@ public abstract class AbstractLine
 		{
 			try
 			{
-				dsb.add(graphPoint.getValue(), "evolution", getBuildLabel(graphPoints.getProjectName(), graphPoint.getBuildNumber()));
+				dsb.add(graphPoint.getValue(), label, getBuildLabel(graphPoints.getProjectName(), graphPoint.getBuildNumber()));
 			}
 			catch(ItemNotFoundException e)
 			{
@@ -61,6 +65,11 @@ public abstract class AbstractLine
 	protected void setId(int id)
 	{
 		this.id = id;
+	}
+	
+	protected String getLabel()
+	{
+		return label;
 	}
 	
 	protected GraphPointList getGraphPoints()

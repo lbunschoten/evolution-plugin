@@ -27,6 +27,10 @@ public class EvolutionConfig implements Cloneable, Serializable
 	
 	private boolean derivativeGraphEnabled;
 	
+	private boolean displayPoints;
+	
+	private boolean displayIndividualResults;
+	
 	private HashMap<String, DataProviderConfig> dataProviders = new HashMap<String, DataProviderConfig>();
 	
 	public enum DataProviderDescriptor
@@ -34,13 +38,13 @@ public class EvolutionConfig implements Cloneable, Serializable
 		//formatter:off
 		CHECKSTYLE	("CheckStyle", 	"**/checkstyle-result.xml", 	new CheckStyleDataProvider("CHECKSTYLE")),
 		FINDBUGS	("FindBugs", 	"**/findbugsXml.xml", 			new FindBugsDataProvider("FINDBUGS")),
-		CPD			("CPD", 		"**/findbugsXml.xml", 			new CPDDataProvider("CPD")),
-		PMD			("PMD",			"**/findbugsXml.xml", 			new PMDDataProvider("PMD")),
-		COBERTURA	("Cobertura", 	"**/findbugsXml.xml", 			new CoberturaDataProvider("COBERTURA")),
-		NCOVER		("NCover", 		"**/findbugsXml.xml", 			new NCoverDataProvider("NCOVER")),
-		SIMIAN		("Simian", 		"**/findbugsXml.xml", 			new SimianDataProvider("SIMIAN")),
-		STYLECOP	("StyleCop", 	"**/findbugsXml.xml", 			new StyleCopDataProvider("STYLECOP")),
-		FXCOP		("FxCop", 		"**/findbugsXml.xml", 			new FxCopDataProvider("FXCOP"));
+		CPD			("CPD", 		"**/cpd.xml", 					new CPDDataProvider("CPD")),
+		PMD			("PMD",			"**/pmd.xml", 					new PMDDataProvider("PMD")),
+		COBERTURA	("Cobertura", 	"**/coverage.xml", 				new CoberturaDataProvider("COBERTURA")),
+		NCOVER		("NCover", 		"**/fullcoverage.html",			new NCoverDataProvider("NCOVER")),
+		SIMIAN		("Simian", 		"", 							new SimianDataProvider("SIMIAN")),
+		STYLECOP	("StyleCop", 	"", 							new StyleCopDataProvider("STYLECOP")),
+		FXCOP		("FxCop", 		"", 							new FxCopDataProvider("FXCOP"));
 		//formatter:on
 		
 		String name;
@@ -82,7 +86,19 @@ public class EvolutionConfig implements Cloneable, Serializable
 		}
 	}
 	
-	public HashMap<String, DataProviderConfig> getDataProviders()
+	public HashMap<String, DataProvider> getDataProviders()
+	{
+		HashMap<String, DataProvider> dataProviders = new HashMap<String, DataProvider>();
+		
+		for(int i = 0; i < DataProviderDescriptor.values().length; i++)
+		{
+			dataProviders.put(DataProviderDescriptor.values()[i].toString(), DataProviderDescriptor.valueOf(DataProviderDescriptor.values()[i].toString()).getDataProvider());
+		}
+		
+		return dataProviders;
+	}
+	
+	public HashMap<String, DataProviderConfig> getDataProviderConfigs()
 	{
 		HashMap<String, DataProviderConfig> configs = new HashMap<String, DataProviderConfig>();
 		
@@ -136,6 +152,26 @@ public class EvolutionConfig implements Cloneable, Serializable
 	public void setDerivativeGraphEnabled(boolean enabled)
 	{
 		derivativeGraphEnabled = enabled;
+	}
+
+	public boolean getDisplayPoints()
+	{
+		return displayPoints;
+	}
+
+	public void setDisplayPoints(boolean displayPoints)
+	{
+		this.displayPoints = displayPoints;
+	}
+
+	public boolean getDisplayIndividualResults()
+	{
+		return displayIndividualResults;
+	}
+
+	public void setDisplayIndividualResults(boolean displayIndividualResults)
+	{
+		this.displayIndividualResults = displayIndividualResults;
 	}
 	
 	/**

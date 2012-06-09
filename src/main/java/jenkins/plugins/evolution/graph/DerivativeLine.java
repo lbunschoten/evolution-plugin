@@ -14,9 +14,11 @@ import org.jfree.chart.renderer.category.LineAndShapeRenderer;
 public class DerivativeLine extends AbstractLine
 {
 	
+	private static final String LABEL = "Derivative";
+	
 	public DerivativeLine(GraphPointList graphPoints)
 	{
-		super(graphPoints);
+		super(LABEL, graphPoints);
 	}
 	
 	@Override

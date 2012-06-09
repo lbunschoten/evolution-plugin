@@ -13,9 +13,9 @@ import org.jfree.chart.renderer.category.LineAndShapeRenderer;
 public class DataProviderLine extends AbstractLine
 {
 	
-	public DataProviderLine(GraphPointList graphPoints)
+	public DataProviderLine(String label, GraphPointList graphPoints)
 	{
-		super(graphPoints);
+		super(label, graphPoints);
 	}
 	
 	/**

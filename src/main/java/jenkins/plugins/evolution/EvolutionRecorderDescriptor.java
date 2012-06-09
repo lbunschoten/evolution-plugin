@@ -43,9 +43,9 @@ public final class EvolutionRecorderDescriptor extends BuildStepDescriptor<Publi
 	{
 		EvolutionRecorder recorder = new EvolutionRecorder();
 		
-		for(Entry<String, DataProviderConfig> dataProvider : recorder.getConfig().getDataProviders().entrySet())
+		for(Entry<String, DataProviderConfig> dataProvider : recorder.getConfig().getDataProviderConfigs().entrySet())
 		{
-			req.bindParameters(recorder.getConfig().getDataProviders().get(dataProvider.getKey()), "dataprovider." + dataProvider.getKey() + ".");
+			req.bindParameters(recorder.getConfig().getDataProviderConfigs().get(dataProvider.getKey()), "dataprovider." + dataProvider.getKey() + ".");
 		}
 		
 		req.bindParameters(recorder.getConfig(), "evolution.");

@@ -115,7 +115,7 @@ public class EvolutionGraph extends Graph
 		{
 			int id = line.getId();
 			
-			plot.setDataset(id, line.createDataset());
+			plot.setDataset(id, line.createDataset(line.getLabel()));
 			
 			if(line.getYAxis() != null)
 			{

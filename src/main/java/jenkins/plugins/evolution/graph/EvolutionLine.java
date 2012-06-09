@@ -47,9 +47,15 @@ public class EvolutionLine extends AbstractLine
 	 */
 	private static final double SERIES_SHAPE_OFFSET_BIG = SERIES_SHAPE_SIZE_BIG / 2;
 	
-	public EvolutionLine(GraphPointList graphPoints)
+	private static final String LABEL = "Evolution";
+	
+	private boolean displayPoints = true;
+	
+	public EvolutionLine(GraphPointList graphPoints, boolean displayPoints)
 	{
-		super(graphPoints);
+		super(LABEL, graphPoints);
+		
+		this.displayPoints = displayPoints;
 	}
 	
 	@Override
@@ -77,7 +83,7 @@ public class EvolutionLine extends AbstractLine
 			renderer.setSeriesShape(id, new java.awt.geom.Ellipse2D.Double(-SERIES_SHAPE_OFFSET_BIG, -SERIES_SHAPE_OFFSET_BIG, SERIES_SHAPE_SIZE_BIG, SERIES_SHAPE_SIZE_BIG));
 		}
 		
-		renderer.setSeriesShapesVisible(id, true);
+		renderer.setSeriesShapesVisible(id, displayPoints);
 		renderer.setSeriesFillPaint(id, Color.BLACK);
 		renderer.setSeriesToolTipGenerator(id, getToolTipGenerator());
 		renderer.setSeriesItemURLGenerator(id, getUrlGenerator());

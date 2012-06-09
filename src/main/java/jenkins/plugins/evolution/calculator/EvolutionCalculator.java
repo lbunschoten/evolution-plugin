@@ -109,7 +109,7 @@ public class EvolutionCalculator
 	 */
 	private DataProviderConfig getDataProviderConfig(String dataProvider) throws InvalidConfigException
 	{
-		DataProviderConfig dataProviderConfig = config.getDataProviders().get(dataProvider);
+		DataProviderConfig dataProviderConfig = config.getDataProviderConfigs().get(dataProvider);
 		
 		if(dataProviderConfig == null)
 		{

@@ -125,11 +125,11 @@ public class EvolutionProjectAction extends Actionable implements Action
 		
 		// Load config (quit on failure)
 		EvolutionConfig config = getConfig();
-		if(config == null)
+		if(config == null || !config.getDisplayPoints())
 		{
 			return;
 		}
-		
+				
 		addScoreGraphPoints(graph, config);
 		
 		graph.doMap(req, rsp);
@@ -206,17 +206,20 @@ public class EvolutionProjectAction extends Actionable implements Action
 			}
 		}
 		
-		scoreGraph.addLine(new EvolutionLine(evolutionGraphPoints));
+		scoreGraph.addLine(new EvolutionLine(evolutionGraphPoints, config.getDisplayPoints()));
 		
-		for(Entry<String, GraphPointList> list : dataProviderGraphPoints.entrySet())
+		if(config.getDisplayIndividualResults())
 		{
-			scoreGraph.addLine(new DataProviderLine(list.getValue()));
+			for(Entry<String, GraphPointList> list : dataProviderGraphPoints.entrySet())
+			{
+				scoreGraph.addLine(new DataProviderLine(EvolutionConfig.DataProviderDescriptor.valueOf(list.getKey()).getName(), list.getValue()));
+			}
 		}
 		
 		return scoreGraph;
 	}
 	
-	public EvolutionGraph addDerivativeGraphPoints(EvolutionGraph graph, EvolutionConfig config)
+	private EvolutionGraph addDerivativeGraphPoints(EvolutionGraph graph, EvolutionConfig config)
 	{
 		double totalScore = 0;
 		HashMap<String, Double> dataProviderScores;
