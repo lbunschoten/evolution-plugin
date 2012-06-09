@@ -99,7 +99,7 @@ public class DataProviderTest
 
 			try
 			{
-				dataProvider.getResult(new FileInputStream(new File("src/test/resources/invalid.xml")));
+				System.out.println(dataProvider.getResult(new FileInputStream(new File("src/test/resources/invalid.xml"))).getData());
 				
 				fail("Should have reached catch clause");
 			}

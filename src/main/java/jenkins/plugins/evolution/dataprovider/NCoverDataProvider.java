@@ -4,10 +4,10 @@ import java.io.InputStream;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Locale;
-import java.util.regex.MatchResult;
 import jenkins.plugins.evolution.domain.Result;
+import jenkins.plugins.evolution.persistence.HtmlReader;
 import jenkins.plugins.evolution.persistence.PersistenceException;
-import jenkins.plugins.evolution.persistence.RegExpReader;
+import org.htmlcleaner.TagNode;
 
 /**
  * This class can be used to retrieve data from ncover result files. The total
@@ -23,9 +23,9 @@ public class NCoverDataProvider extends DataProvider
 	}
 	
 	@Override
-	protected RegExpReader getReader(InputStream inputStream)
+	protected HtmlReader getReader(InputStream inputStream)
 	{
-		return new RegExpReader(inputStream, "Symbol Coverage: <span class=\"[\\w\\s]+\">([\\d,]+)%<\\/span>");
+		return new HtmlReader(inputStream);
 	}
 	
 	@Override
@@ -37,22 +37,41 @@ public class NCoverDataProvider extends DataProvider
 	@Override
 	public double readResult(InputStream inputStream) throws PersistenceException
 	{
+		TagNode tagNode = getReader(inputStream).read();
+		
+		if(tagNode != null)
+		{
+			TagNode[] tagNodes = tagNode.getElementsByName("p", true);
+			
+			for(int i = 0; i < tagNodes.length; i++)
+			{
+				if(tagNodes[i].getText().toString().contains("Symbol Coverage"))
+				{
+					return formatResult(tagNodes[i].getChildTags()[0].getText().toString());
+				}
+			}
+		}
+			
+		throw new PersistenceException("Could not parse result");
+	}
+	
+	private double formatResult(String result) throws PersistenceException
+	{
+		result = result.replace("%", "");
 		double score = 0;
-		MatchResult result = null;
 		
 		try
+		{	
+			NumberFormat format = NumberFormat.getInstance(Locale.GERMAN);
+			score = format.parse(result).doubleValue();
+		}
+		catch(NumberFormatException e)
 		{
-			 result = getReader(inputStream).read();
-			
-			if(result != null)
-			{
-				NumberFormat format = NumberFormat.getInstance(Locale.GERMAN);
-				score = format.parse(result.group(1)).doubleValue();
-			}
+			throw new PersistenceException("Could not parse result " + result);
 		}
 		catch(ParseException e)
 		{
-			throw new PersistenceException("Could not parse result: " + result.group(1));
+			throw new PersistenceException("Could not parse result " + result);
 		}
 		
 		return score;
