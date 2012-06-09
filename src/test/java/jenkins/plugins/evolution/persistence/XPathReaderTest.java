@@ -30,16 +30,6 @@ public class XPathReaderTest
 		
 		assertEquals(0.24761904761904763, reader.read());
 	}
-
-	@Test
-	public void test2() throws PersistenceException, FileNotFoundException
-	{
-		System.setProperty("file.encoding", "UTF-8");
-		
-		XPathReader reader = new XPathReader(new FileInputStream(new File("src/test/resources/fxcop.xml")), "count(//Issue)");
-		
-		assertEquals(187.0, reader.read());
-	}
 	
 	@Test(expected = FileNotFoundException.class)
 	public void testNonExistingFile() throws PersistenceException, FileNotFoundException
