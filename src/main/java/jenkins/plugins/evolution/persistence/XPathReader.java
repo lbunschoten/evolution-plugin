@@ -58,8 +58,7 @@ public class XPathReader implements Reader<XPathReader>
 		}
 		catch(XPathExpressionException e)
 		{
-			e.printStackTrace();
-			throw new PersistenceException("Invalid XPath expression: " + expression);
+			throw new PersistenceException("Could not retrieve results from file using the expression: " + expression);
 		}
 		finally
 		{
